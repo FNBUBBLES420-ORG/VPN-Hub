@@ -6,21 +6,6 @@ VPN Hub is committed to maintaining the highest standards of cybersecurity and p
 
 ---
 
-## 📋 Table of Contents
-
-- [Security Overview](#security-overview)
-- [Supported Versions](#supported-versions)
-- [Reporting Security Vulnerabilities](#reporting-security-vulnerabilities)
-- [Security Architecture](#security-architecture)
-- [Security Features](#security-features)
-- [Threat Model](#threat-model)
-- [Security Testing](#security-testing)
-- [Compliance Standards](#compliance-standards)
-- [Security Best Practices](#security-best-practices)
-- [Incident Response](#incident-response)
-
----
-
 ## 🛡️ Security Overview
 
 VPN Hub employs a **Zero Trust, Defense-in-Depth** security architecture designed to protect against sophisticated cyber threats while maintaining user privacy and system integrity.
