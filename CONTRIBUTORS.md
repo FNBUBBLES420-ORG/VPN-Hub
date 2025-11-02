@@ -58,7 +58,7 @@ Special recognition for contributors who help maintain our enterprise-grade secu
 
 ### **Security Researchers**
 - *We welcome responsible disclosure of security vulnerabilities*
-- Contact: githubsecurityissues@fnbubbles420.org
+- Contact: securitygithubissue@fnbubbles420.org
 
 ### **Security Auditors**
 - *Recognition will be added here for external security audits*
@@ -128,7 +128,7 @@ By contributing to VPN Hub, you agree that:
 ### **For Contributors**
 - **GitHub Issues**: https://github.com/Fnbubbles420-org/vpn-hub/issues
 - **Email**: contributors@fnbubbles420.org
-- **Security Issues**: githubsecurityissues@fnbubbles420.org
+- **Security Issues**: securitygithubissue@fnbubbles420.org
 
 ### **For Project Questions**
 - **General**: Create a GitHub issue
