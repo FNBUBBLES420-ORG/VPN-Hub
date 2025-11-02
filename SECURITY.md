@@ -47,9 +47,7 @@ We provide security updates for the following versions of VPN Hub:
 
 | Version | Supported          | Security Updates | End of Life |
 | ------- | ------------------ | ---------------- | ----------- |
-| 1.0.x   | ✅ **Fully Supported** | Active          | TBD         |
-| 0.9.x   | ⚠️ **Limited Support** | Critical Only   | 2026-06-01  |
-| < 0.9   | ❌ **Unsupported**     | None            | 2025-12-01  |
+| 1.0.x   | ✅ **Fully Supported** | Active          | Full Maintained |
 
 ### **Security Update Policy**
 - **Critical Vulnerabilities**: Patched within 24-48 hours
