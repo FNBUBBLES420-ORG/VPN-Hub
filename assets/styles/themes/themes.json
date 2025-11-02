@@ -1,0 +1,88 @@
+{
+  "themes": {
+    "dark": {
+      "name": "Dark Theme",
+      "description": "Professional dark theme for low-light environments",
+      "colors": {
+        "primary": "#0066CC",
+        "secondary": "#004499",
+        "background": "#1A1A1A",
+        "surface": "#2D2D2D",
+        "text_primary": "#FFFFFF",
+        "text_secondary": "#CCCCCC",
+        "success": "#00CC66",
+        "warning": "#FF9900",
+        "error": "#CC0000",
+        "accent": "#6699FF"
+      },
+      "fonts": {
+        "primary": "Segoe UI, Arial, sans-serif",
+        "monospace": "Consolas, Monaco, monospace"
+      },
+      "spacing": {
+        "small": "8px",
+        "medium": "16px",
+        "large": "24px",
+        "xlarge": "32px"
+      }
+    },
+    "light": {
+      "name": "Light Theme",
+      "description": "Clean light theme for bright environments",
+      "colors": {
+        "primary": "#0066CC",
+        "secondary": "#004499",
+        "background": "#FFFFFF",
+        "surface": "#F5F5F5",
+        "text_primary": "#333333",
+        "text_secondary": "#666666",
+        "success": "#00AA44",
+        "warning": "#FF7700",
+        "error": "#CC0000",
+        "accent": "#3377DD"
+      },
+      "fonts": {
+        "primary": "Segoe UI, Arial, sans-serif",
+        "monospace": "Consolas, Monaco, monospace"
+      },
+      "spacing": {
+        "small": "8px",
+        "medium": "16px",
+        "large": "24px",
+        "xlarge": "32px"
+      }
+    },
+    "high_contrast": {
+      "name": "High Contrast",
+      "description": "High contrast theme for accessibility",
+      "colors": {
+        "primary": "#0000FF",
+        "secondary": "#000080",
+        "background": "#000000",
+        "surface": "#333333",
+        "text_primary": "#FFFFFF",
+        "text_secondary": "#FFFF00",
+        "success": "#00FF00",
+        "warning": "#FFFF00",
+        "error": "#FF0000",
+        "accent": "#00FFFF"
+      },
+      "fonts": {
+        "primary": "Arial, sans-serif",
+        "monospace": "Courier New, monospace"
+      },
+      "spacing": {
+        "small": "10px",
+        "medium": "20px",
+        "large": "30px",
+        "xlarge": "40px"
+      }
+    }
+  },
+  "default_theme": "dark",
+  "theme_preferences": {
+    "auto_switch": false,
+    "system_theme_detection": true,
+    "custom_css_support": true
+  }
+}

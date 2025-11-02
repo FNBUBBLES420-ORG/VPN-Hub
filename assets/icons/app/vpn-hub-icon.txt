@@ -1,0 +1,11 @@
+# Placeholder for VPN Hub Application Icon
+# This would typically be a PNG, ICO, or SVG file
+# For demonstration, this is a text description
+
+VPN Hub Icon Specifications:
+- Format: PNG/ICO/SVG
+- Sizes: 16x16, 32x32, 64x64, 128x128, 256x256
+- Design: Shield with lock symbol
+- Colors: Blue gradient (#0066CC to #004499)
+- Background: Transparent
+- Style: Modern, flat design with subtle shadow

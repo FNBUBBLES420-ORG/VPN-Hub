@@ -1,0 +1,121 @@
+{
+  "nordvpn": {
+    "display_name": "NordVPN",
+    "provider_type": "commercial",
+    "authentication": {
+      "method": "username_password",
+      "supports_token": true,
+      "supports_certificate": false
+    },
+    "connection": {
+      "protocols": ["openvpn", "wireguard", "nordlynx"],
+      "default_protocol": "nordlynx",
+      "encryption": "AES-256-GCM",
+      "dns_servers": ["103.86.96.100", "103.86.99.100"]
+    },
+    "api": {
+      "base_url": "https://api.nordvpn.com",
+      "endpoints": {
+        "login": "/user/login",
+        "servers": "/server",
+        "status": "/user/status"
+      },
+      "rate_limit": {
+        "requests_per_minute": 60,
+        "burst_limit": 10
+      }
+    },
+    "security": {
+      "certificate_pinning": true,
+      "kill_switch": true,
+      "dns_leak_protection": true,
+      "ipv6_leak_protection": true
+    },
+    "features": {
+      "double_vpn": true,
+      "tor_over_vpn": true,
+      "dedicated_ip": true,
+      "p2p_support": true,
+      "streaming_optimization": true
+    }
+  },
+  "expressvpn": {
+    "display_name": "ExpressVPN",
+    "provider_type": "commercial",
+    "authentication": {
+      "method": "activation_code",
+      "supports_token": false,
+      "supports_certificate": true
+    },
+    "connection": {
+      "protocols": ["openvpn", "lightway", "ikev2"],
+      "default_protocol": "lightway",
+      "encryption": "AES-256-GCM",
+      "dns_servers": ["198.18.0.2", "198.18.0.3"]
+    },
+    "api": {
+      "base_url": "https://www.expressvpn.com/api",
+      "endpoints": {
+        "activate": "/activate",
+        "locations": "/locations",
+        "status": "/status"
+      },
+      "rate_limit": {
+        "requests_per_minute": 30,
+        "burst_limit": 5
+      }
+    },
+    "security": {
+      "certificate_pinning": true,
+      "kill_switch": true,
+      "dns_leak_protection": true,
+      "ipv6_leak_protection": true
+    },
+    "features": {
+      "split_tunneling": true,
+      "threat_manager": true,
+      "keys_password_manager": true,
+      "mediastreamer": true
+    }
+  },
+  "surfshark": {
+    "display_name": "Surfshark",
+    "provider_type": "commercial",
+    "authentication": {
+      "method": "username_password",
+      "supports_token": true,
+      "supports_certificate": false
+    },
+    "connection": {
+      "protocols": ["openvpn", "wireguard", "ikev2"],
+      "default_protocol": "wireguard",
+      "encryption": "AES-256-GCM",
+      "dns_servers": ["162.252.172.57", "149.154.159.92"]
+    },
+    "api": {
+      "base_url": "https://api.surfshark.com",
+      "endpoints": {
+        "login": "/auth/login",
+        "servers": "/server/clusters",
+        "status": "/user/status"
+      },
+      "rate_limit": {
+        "requests_per_minute": 45,
+        "burst_limit": 8
+      }
+    },
+    "security": {
+      "certificate_pinning": true,
+      "kill_switch": true,
+      "dns_leak_protection": true,
+      "ipv6_leak_protection": true
+    },
+    "features": {
+      "multihop": true,
+      "camouflage_mode": true,
+      "noborders_mode": true,
+      "cleanweb": true,
+      "unlimited_devices": true
+    }
+  }
+}

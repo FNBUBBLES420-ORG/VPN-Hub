@@ -1,0 +1,191 @@
+[
+  {
+    "country_code": "US",
+    "country_name": "United States",
+    "continent": "North America",
+    "cities": [
+      {
+        "city_name": "New York",
+        "city_code": "NYC",
+        "latitude": 40.7128,
+        "longitude": -74.0060,
+        "servers": ["us-nyc-001", "us-nyc-002", "us-nyc-003"]
+      },
+      {
+        "city_name": "Los Angeles",
+        "city_code": "LAX",
+        "latitude": 34.0522,
+        "longitude": -118.2437,
+        "servers": ["us-lax-001", "us-lax-002", "us-lax-003"]
+      },
+      {
+        "city_name": "Chicago",
+        "city_code": "CHI",
+        "latitude": 41.8781,
+        "longitude": -87.6298,
+        "servers": ["us-chi-001", "us-chi-002"]
+      }
+    ]
+  },
+  {
+    "country_code": "GB",
+    "country_name": "United Kingdom",
+    "continent": "Europe",
+    "cities": [
+      {
+        "city_name": "London",
+        "city_code": "LON",
+        "latitude": 51.5074,
+        "longitude": -0.1278,
+        "servers": ["gb-lon-001", "gb-lon-002", "gb-lon-003"]
+      },
+      {
+        "city_name": "Manchester",
+        "city_code": "MAN",
+        "latitude": 53.4808,
+        "longitude": -2.2426,
+        "servers": ["gb-man-001", "gb-man-002"]
+      }
+    ]
+  },
+  {
+    "country_code": "DE",
+    "country_name": "Germany",
+    "continent": "Europe",
+    "cities": [
+      {
+        "city_name": "Berlin",
+        "city_code": "BER",
+        "latitude": 52.5200,
+        "longitude": 13.4050,
+        "servers": ["de-ber-001", "de-ber-002"]
+      },
+      {
+        "city_name": "Frankfurt",
+        "city_code": "FRA",
+        "latitude": 50.1109,
+        "longitude": 8.6821,
+        "servers": ["de-fra-001", "de-fra-002", "de-fra-003"]
+      }
+    ]
+  },
+  {
+    "country_code": "JP",
+    "country_name": "Japan",
+    "continent": "Asia",
+    "cities": [
+      {
+        "city_name": "Tokyo",
+        "city_code": "TYO",
+        "latitude": 35.6762,
+        "longitude": 139.6503,
+        "servers": ["jp-tyo-001", "jp-tyo-002", "jp-tyo-003"]
+      },
+      {
+        "city_name": "Osaka",
+        "city_code": "OSA",
+        "latitude": 34.6937,
+        "longitude": 135.5023,
+        "servers": ["jp-osa-001", "jp-osa-002"]
+      }
+    ]
+  },
+  {
+    "country_code": "CA",
+    "country_name": "Canada",
+    "continent": "North America",
+    "cities": [
+      {
+        "city_name": "Toronto",
+        "city_code": "YYZ",
+        "latitude": 43.6532,
+        "longitude": -79.3832,
+        "servers": ["ca-yyz-001", "ca-yyz-002"]
+      },
+      {
+        "city_name": "Vancouver",
+        "city_code": "YVR",
+        "latitude": 49.2827,
+        "longitude": -123.1207,
+        "servers": ["ca-yvr-001", "ca-yvr-002"]
+      }
+    ]
+  },
+  {
+    "country_code": "AU",
+    "country_name": "Australia",
+    "continent": "Oceania",
+    "cities": [
+      {
+        "city_name": "Sydney",
+        "city_code": "SYD",
+        "latitude": -33.8688,
+        "longitude": 151.2093,
+        "servers": ["au-syd-001", "au-syd-002"]
+      },
+      {
+        "city_name": "Melbourne",
+        "city_code": "MEL",
+        "latitude": -37.8136,
+        "longitude": 144.9631,
+        "servers": ["au-mel-001", "au-mel-002"]
+      }
+    ]
+  },
+  {
+    "country_code": "NL",
+    "country_name": "Netherlands",
+    "continent": "Europe",
+    "cities": [
+      {
+        "city_name": "Amsterdam",
+        "city_code": "AMS",
+        "latitude": 52.3676,
+        "longitude": 4.9041,
+        "servers": ["nl-ams-001", "nl-ams-002", "nl-ams-003"]
+      }
+    ]
+  },
+  {
+    "country_code": "SG",
+    "country_name": "Singapore",
+    "continent": "Asia",
+    "cities": [
+      {
+        "city_name": "Singapore",
+        "city_code": "SIN",
+        "latitude": 1.3521,
+        "longitude": 103.8198,
+        "servers": ["sg-sin-001", "sg-sin-002", "sg-sin-003"]
+      }
+    ]
+  },
+  {
+    "country_code": "FR",
+    "country_name": "France",
+    "continent": "Europe",
+    "cities": [
+      {
+        "city_name": "Paris",
+        "city_code": "CDG",
+        "latitude": 48.8566,
+        "longitude": 2.3522,
+        "servers": ["fr-cdg-001", "fr-cdg-002"]
+      }
+    ]
+  },
+  {
+    "country_code": "SE",
+    "country_name": "Sweden",
+    "continent": "Europe",
+    "cities": [
+      {
+        "city_name": "Stockholm",
+        "city_code": "ARN",
+        "latitude": 59.3293,
+        "longitude": 18.0686,
+        "servers": ["se-arn-001", "se-arn-002"]
+      }
+    ]
+  }
+]

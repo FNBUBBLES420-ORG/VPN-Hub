@@ -1,0 +1,58 @@
+{
+  "certificate_pins": {
+    "nordvpn.com": {
+      "pins": [
+        "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+        "sha256/BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB="
+      ],
+      "backup_pins": [
+        "sha256/CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC=",
+        "sha256/DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD="
+      ],
+      "last_updated": "2025-11-01T00:00:00Z",
+      "expiry_days": 90
+    },
+    "expressvpn.com": {
+      "pins": [
+        "sha256/EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE=",
+        "sha256/FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF="
+      ],
+      "backup_pins": [
+        "sha256/1111111111111111111111111111111111111111111=",
+        "sha256/2222222222222222222222222222222222222222222="
+      ],
+      "last_updated": "2025-11-01T00:00:00Z",
+      "expiry_days": 90
+    },
+    "surfshark.com": {
+      "pins": [
+        "sha256/3333333333333333333333333333333333333333333=",
+        "sha256/4444444444444444444444444444444444444444444="
+      ],
+      "backup_pins": [
+        "sha256/5555555555555555555555555555555555555555555=",
+        "sha256/6666666666666666666666666666666666666666666="
+      ],
+      "last_updated": "2025-11-01T00:00:00Z",
+      "expiry_days": 90
+    }
+  },
+  "certificate_validation": {
+    "enforce_pinning": true,
+    "allow_backup_pins": true,
+    "pin_update_frequency_days": 30,
+    "pin_validation_timeout": 10,
+    "fallback_to_system_ca": false
+  },
+  "security_policy": {
+    "require_tls_minimum": "1.2",
+    "allowed_cipher_suites": [
+      "ECDHE-RSA-AES256-GCM-SHA384",
+      "ECDHE-RSA-AES128-GCM-SHA256",
+      "ECDHE-RSA-AES256-SHA384",
+      "ECDHE-RSA-AES128-SHA256"
+    ],
+    "certificate_transparency_required": true,
+    "ocsp_stapling_required": true
+  }
+}
