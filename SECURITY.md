@@ -481,12 +481,7 @@ pytest tests/test_network_security.py -v
 **Security Lead**
 - **Name**: BubblesTheDev
 - **Role**: Lead Security Engineer
-- **Email**: bubbles@fnbubbles420.org
-
-**Incident Response Team**
-- **Emergency Contact**: incident-response@fnbubbles420.org
-- **Phone**: [Available for verified security researchers]
-- **Escalation**: security-escalation@fnbubbles420.org
+- **Email**: bubblesthedev@fnbubbles420.org
 
 ### **Additional Resources**
 
