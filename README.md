@@ -319,8 +319,8 @@ This project is licensed under the GNU General Public License v3.0 (GPLv3).
 Copyright (c) 2025 FNBubbles420 Org
 
 **Original Authors & Credit:**
-- Project Owner: FNBubbles420 Org (https://fnbubbles420.org)
-- Lead Developer: BubblesTheDev (https://github.com/kernferm)
+- Project Owner: [FNBubbles420 Org](https://fnbubbles420.org)
+- Lead Developer: [BubblesTheDev](https://github.com/kernferm)
 - Contributors: See CONTRIBUTORS.md for full list
 - Original concept and architecture by FNBubbles420 Org
 
@@ -341,4 +341,5 @@ This application is designed for legitimate privacy and security purposes. Users
 **🔒 Security Status: ENTERPRISE-GRADE HARDENED**  
 *Last Security Audit: November 1, 2025*  
 *All security modules tested and validated*  
+
 *Zero critical vulnerabilities remaining*
