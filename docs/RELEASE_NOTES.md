@@ -307,7 +307,7 @@ python src/main.py
 
 ### **Reporting Issues**
 - **Bug Reports**: Create issues on GitHub repository
-- **Security Issues**: Email githubsecurityissues@fnbubbles420.org
+- **Security Issues**: Email securitygithubissue@fnbubbles420.org
 - **Feature Requests**: Use GitHub Discussions for community input
 
 ### **Getting Help**
