@@ -1,0 +1,47 @@
+GNU GENERAL PUBLIC LICENSE
+Version 3, 29 June 2007
+
+Copyright (c) 2025 FNBubbles420 Org
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+---
+
+## Original Authors & Credit
+- Project Owner: FNBubbles420 Org (https://fnbubbles420.org)
+- Lead Developer: BubblesTheDev (https://github.com/kernferm)
+- Contributors: See CONTRIBUTORS.md for full list
+- Original concept and architecture by FNBubbles420 Org
+
+## Third-Party Licenses
+This software includes components with the following licenses:
+- PyQt5: GPL v3 / Commercial
+- Cryptography: Apache License 2.0 / BSD License
+- Other dependencies: See individual package licenses
+
+## VPN Provider Terms
+Users must comply with the terms of service of their respective VPN providers:
+- NordVPN: https://nordvpn.com/terms-of-service/
+- ExpressVPN: https://www.expressvpn.com/terms-of-service
+- Surfshark: https://surfshark.com/terms-of-service
+
+## Disclaimer
+This software is provided for educational and legitimate privacy purposes only. 
+Users are responsible for ensuring their use complies with:
+- Local laws and regulations
+- VPN provider terms of service
+- Network usage policies
+- Applicable international laws
+
+All software, documentation, and intellectual property created by FNBubbles420 Org is owned by the nonprofit and protected under applicable copyright law and the GNU GPL v3 license. Unauthorized use, reproduction, or distribution is prohibited except as permitted by the license.
