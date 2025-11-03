@@ -127,16 +127,36 @@ class InputSanitizer:
                 if re.search(r'\$\([^)]*\)', password):
                     raise SecurityException("Password contains command substitution pattern")
         else:
-            # Standard CLI mode - more restrictive
-            dangerous_chars = ['`', '$', '|', '&', ';', '<', '>', '\n', '\r', '\t']
+            # CLI mode - secure but allow common password characters
+            # Block only the most dangerous command execution characters
+            dangerous_chars = ['`', '|', ';', '<', '>', '\n', '\r', '\t']
             for char in dangerous_chars:
                 if char in password:
-                    raise SecurityException(f"Password contains prohibited character")
+                    raise SecurityException(f"Password contains prohibited character: '{char}'")
             
-            # Check for command injection patterns
-            for pattern in InputSanitizer.COMMAND_INJECTION_PATTERNS:
-                if re.search(pattern, password, re.IGNORECASE):
-                    raise SecurityException("Password contains suspicious patterns")
+            # Check for specific command injection patterns while allowing special chars in passwords
+            if '`' in password and password.count('`') >= 2:
+                if re.search(r'`[^`]+`', password):
+                    raise SecurityException("Password contains command execution pattern")
+            
+            # Check for command substitution patterns but be more specific
+            if '$(' in password and ')' in password:
+                if re.search(r'\$\([^)]*\)', password):
+                    raise SecurityException("Password contains command substitution pattern")
+            
+            # Check for dangerous command patterns but allow isolated special characters
+            dangerous_patterns = [
+                r'\|\s*\w+',    # Pipe to command
+                r'&&\s*\w+',    # Command chaining with &&
+                r'&\s+\w+',     # Background process execution
+                r';\s*\w+',     # Command separation
+                r'>\s*\w+',     # Output redirection
+                r'<\s*\w+',     # Input redirection
+                r'\$\{[^}]*\}', # Variable expansion
+            ]
+            for pattern in dangerous_patterns:
+                if re.search(pattern, password):
+                    raise SecurityException("Password contains suspicious command patterns")
         
         # Check for null bytes
         if '\x00' in password:
