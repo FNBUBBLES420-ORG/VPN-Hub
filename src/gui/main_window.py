@@ -142,7 +142,8 @@ class ProviderConfigDialog(QDialog):
             # Validate inputs using security sanitizer
             sanitized_provider = InputSanitizer.sanitize_provider_name(provider)
             sanitized_username = InputSanitizer.sanitize_username(username)
-            sanitized_password = InputSanitizer.sanitize_password(password)
+            # Use GUI mode for password validation since this is a GUI application
+            sanitized_password = InputSanitizer.sanitize_password(password, gui_mode=True)
             
             return {
                 'provider': sanitized_provider,
