@@ -30,6 +30,65 @@ class SurfsharkProvider(VPNProviderInterface):
         self.api_base = "https://api.surfshark.com"
         self.secure_executor = SecureCommandExecutor()
         
+        # Service status warning
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.warning("⚠️  SURFSHARK SERVICE NOTICE ⚠️")
+        logger.warning("Surfshark VPN is currently experiencing widespread service issues.")
+        logger.warning("Connection reliability may be affected. ETA for fix is unknown.")
+        logger.warning("For questions regarding Surfshark services, please contact:")
+        logger.warning("🔗 Surfshark Support: https://support.surfshark.com/")
+        logger.warning("Try using ExpressVPN, Mullvad, ProtonVPN, or NordVPN instead.")
+        print("\n⚠️  SURFSHARK SERVICE NOTICE ⚠️")
+        print("Surfshark VPN is currently experiencing widespread service issues.")
+        print("Connection reliability may be affected. ETA for fix is unknown.")
+        print("For questions regarding Surfshark services, please contact:")
+        print("🔗 Surfshark Support: https://support.surfshark.com/")
+        print("Try using ExpressVPN, Mullvad, ProtonVPN, or NordVPN instead.\n")
+        
+        # Set up CLI path for Windows
+        import os
+        import platform
+        
+        if platform.system() == "Windows":
+            # Common Surfshark installation paths on Windows
+            possible_paths = [
+                r"C:\Program Files\Surfshark\SurfsharkVPN.exe",
+                r"C:\Program Files (x86)\Surfshark\SurfsharkVPN.exe",
+                r"C:\Users\{}\AppData\Local\Surfshark\SurfsharkVPN.exe".format(os.getenv('USERNAME', '')),
+                "surfshark-vpn.exe",
+                "surfshark.exe"
+            ]
+            
+            self.cli_path = None
+            for path in possible_paths:
+                if os.path.exists(path):
+                    self.cli_path = path
+                    break
+            
+            if not self.cli_path:
+                self.cli_path = "surfshark-vpn"  # Fallback to command name
+        else:
+            self.cli_path = "surfshark-vpn"
+    
+    def is_available(self) -> bool:
+        """Check if Surfshark CLI is available."""
+        try:
+            import subprocess
+            import os
+            
+            if hasattr(self, 'cli_path') and os.path.exists(self.cli_path):
+                return True
+                
+            # Test CLI accessibility
+            result = subprocess.run([self.cli_path, "--version"], 
+                                  capture_output=True, text=True, timeout=10)
+            return result.returncode == 0
+                
+        except Exception as e:
+            print(f"Surfshark CLI not available: {e}")
+            return False
+        
     async def authenticate(self, username: str, password: str) -> bool:
         """Authenticate with Surfshark VPN using secure command execution with subscription checking"""
         try:
@@ -376,7 +435,14 @@ class SurfsharkProvider(VPNProviderInterface):
     async def connect(self, server: ServerInfo, protocol: ProtocolType = None) -> bool:
         """Connect to Surfshark server"""
         try:
-            cmd = ["surfshark-vpn", "connect"]
+            # Check if CLI is available
+            if not self.is_available():
+                print("Surfshark: CLI not found. Please install Surfshark application or CLI tool.")
+                print("Download from: https://surfshark.com/download")
+                self.connection_info.status = ConnectionStatus.ERROR
+                return False
+            
+            cmd = [self.cli_path, "connect"]
             
             # Add server location
             if server.country:
@@ -390,22 +456,49 @@ class SurfsharkProvider(VPNProviderInterface):
             elif protocol == ProtocolType.IKEV2:
                 cmd.extend(["-p", "ikev2"])
             
+            print(f"Surfshark: Connecting to {server.name} ({server.country})")
+            print(f"Surfshark: Executing command: {' '.join(cmd)}")
+            
             process = await asyncio.create_subprocess_exec(
                 *cmd,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE
             )
-            stdout, stderr = await process.communicate()
             
-            if "Connected" in stdout.decode() or process.returncode == 0:
+            # Add timeout to prevent hanging
+            try:
+                stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=45.0)
+            except asyncio.TimeoutError:
+                print("Surfshark: Connection attempt timed out after 45 seconds")
+                try:
+                    process.terminate()
+                    await process.wait()
+                except:
+                    pass
+                return False
+            
+            stdout_text = stdout.decode() if stdout else ""
+            stderr_text = stderr.decode() if stderr else ""
+            
+            print(f"Surfshark: Command output: {stdout_text.strip()}")
+            if stderr_text.strip():
+                print(f"Surfshark: Command error: {stderr_text.strip()}")
+            
+            if "Connected" in stdout_text or process.returncode == 0:
                 self.connection_info.status = ConnectionStatus.CONNECTED
                 self.connection_info.server = server
                 self.connection_info.protocol = protocol or ProtocolType.OPENVPN
+                print(f"Surfshark: Successfully connected to {server.name}")
                 return True
             else:
-                print(f"Surfshark connection failed: {stderr.decode()}")
+                print(f"Surfshark connection failed: {stderr_text}")
                 self.connection_info.status = ConnectionStatus.ERROR
                 return False
+        except FileNotFoundError:
+            print("Surfshark: CLI executable not found. Please install Surfshark application.")
+            print("Download from: https://surfshark.com/download")
+            self.connection_info.status = ConnectionStatus.ERROR
+            return False
         except Exception as e:
             print(f"Surfshark connection error: {e}")
             self.connection_info.status = ConnectionStatus.ERROR
@@ -414,20 +507,45 @@ class SurfsharkProvider(VPNProviderInterface):
     async def disconnect(self) -> bool:
         """Disconnect from Surfshark"""
         try:
+            # Check if CLI is available
+            if not self.is_available():
+                print("Surfshark: CLI not found. Cannot disconnect via CLI.")
+                return False
+                
+            print("Surfshark: Disconnecting...")
+            
             process = await asyncio.create_subprocess_exec(
-                "surfshark-vpn", "disconnect",
+                self.cli_path, "disconnect",
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE
             )
-            stdout, stderr = await process.communicate()
             
-            if "Disconnected" in stdout.decode() or process.returncode == 0:
+            # Add timeout to prevent hanging
+            try:
+                stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=15.0)
+            except asyncio.TimeoutError:
+                print("Surfshark: Disconnect attempt timed out after 15 seconds")
+                try:
+                    process.terminate()
+                    await process.wait()
+                except:
+                    pass
+                return False
+            
+            stdout_text = stdout.decode() if stdout else ""
+            stderr_text = stderr.decode() if stderr else ""
+            
+            if "Disconnected" in stdout_text or process.returncode == 0:
                 self.connection_info.status = ConnectionStatus.DISCONNECTED
                 self.connection_info.server = None
+                print("Surfshark: Successfully disconnected")
                 return True
             else:
-                print(f"Surfshark disconnect failed: {stderr.decode()}")
+                print(f"Surfshark disconnect failed: {stderr_text}")
                 return False
+        except FileNotFoundError:
+            print("Surfshark: CLI executable not found. Please install Surfshark application.")
+            return False
         except Exception as e:
             print(f"Surfshark disconnect error: {e}")
             return False
@@ -435,12 +553,29 @@ class SurfsharkProvider(VPNProviderInterface):
     async def get_connection_status(self) -> ConnectionInfo:
         """Get current Surfshark connection status"""
         try:
+            # Check if CLI is available
+            if not self.is_available():
+                self.connection_info.status = ConnectionStatus.ERROR
+                return self.connection_info
+                
             process = await asyncio.create_subprocess_exec(
-                "surfshark-vpn", "status",
+                self.cli_path, "status",
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE
             )
-            stdout, stderr = await process.communicate()
+            
+            # Add timeout to prevent hanging
+            try:
+                stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=10.0)
+            except asyncio.TimeoutError:
+                print("Surfshark: Status check timed out after 10 seconds")
+                try:
+                    process.terminate()
+                    await process.wait()
+                except:
+                    pass
+                self.connection_info.status = ConnectionStatus.ERROR
+                return self.connection_info
             
             if process.returncode == 0:
                 output = stdout.decode()
@@ -456,6 +591,10 @@ class SurfsharkProvider(VPNProviderInterface):
                 elif "Disconnected" in output or "Not connected" in output:
                     self.connection_info.status = ConnectionStatus.DISCONNECTED
             
+            return self.connection_info
+        except FileNotFoundError:
+            print("Surfshark: CLI executable not found")
+            self.connection_info.status = ConnectionStatus.ERROR
             return self.connection_info
         except Exception as e:
             print(f"Error getting Surfshark status: {e}")
