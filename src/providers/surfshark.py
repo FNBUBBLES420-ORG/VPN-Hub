@@ -243,36 +243,39 @@ class SurfsharkProvider(VPNProviderInterface):
         return servers
     
     async def _get_basic_server_list(self, country: str = None) -> List[ServerInfo]:
-        """Get basic server list for trial/inactive users"""
+        """Get free server list for non-subscribers"""
         servers = []
         
-        # Basic server locations (limited selection)
-        basic_server_locations = [
-            {"id": "surf-us-basic", "name": "United States #us-basic-001", "country": "United States", "city": "New York", "load": 67},
-            {"id": "surf-uk-basic", "name": "United Kingdom #uk-basic-001", "country": "United Kingdom", "city": "London", "load": 73},
-            {"id": "surf-de-basic", "name": "Germany #de-basic-001", "country": "Germany", "city": "Frankfurt", "load": 69},
-            {"id": "surf-nl-basic", "name": "Netherlands #nl-basic-001", "country": "Netherlands", "city": "Amsterdam", "load": 75},
-            {"id": "surf-au-basic", "name": "Australia #au-basic-001", "country": "Australia", "city": "Sydney", "load": 71}
+        # Free server locations (actual free servers available)
+        free_server_locations = [
+            {"id": "surf-us-free", "name": "United States #us-free-001 (Free)", "country": "United States", "city": "New York", "load": 67},
+            {"id": "surf-uk-free", "name": "United Kingdom #uk-free-001 (Free)", "country": "United Kingdom", "city": "London", "load": 73},
+            {"id": "surf-de-free", "name": "Germany #de-free-001 (Free)", "country": "Germany", "city": "Frankfurt", "load": 69},
+            {"id": "surf-nl-free", "name": "Netherlands #nl-free-001 (Free)", "country": "Netherlands", "city": "Amsterdam", "load": 75},
+            {"id": "surf-au-free", "name": "Australia #au-free-001 (Free)", "country": "Australia", "city": "Sydney", "load": 71},
+            {"id": "surf-ca-free", "name": "Canada #ca-free-001 (Free)", "country": "Canada", "city": "Toronto", "load": 68},
+            {"id": "surf-jp-free", "name": "Japan #jp-free-001 (Free)", "country": "Japan", "city": "Tokyo", "load": 74},
+            {"id": "surf-sg-free", "name": "Singapore #sg-free-001 (Free)", "country": "Singapore", "city": "Singapore", "load": 76}
         ]
         
-        for server_data in basic_server_locations:
+        for server_data in free_server_locations:
             # Filter by country if specified
             if country and country.lower() not in server_data["country"].lower():
                 continue
                 
             server = ServerInfo(
                 id=server_data["id"],
-                name=server_data["name"] + " (Limited)",
+                name=server_data["name"],
                 country=server_data["country"],
                 city=server_data["city"],
                 ip_address="",
                 load=server_data["load"],
                 protocols=[ProtocolType.OPENVPN],
-                features=["Basic Access"]
+                features=["Free Access", "Basic Speed", "Limited Bandwidth"]
             )
             servers.append(server)
         
-        print(f"Surfshark: Retrieved {len(servers)} servers (Limited Access - Consider subscribing for 3200+ servers)")
+        print(f"Surfshark: Retrieved {len(servers)} free servers (Subscribe for 3200+ premium servers in 100+ countries)")
         return servers
     
     async def check_subscription_status(self) -> bool:
