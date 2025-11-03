@@ -29,6 +29,22 @@ class CyberGhostProvider(VPNProviderInterface):
         super().__init__("CyberGhost", config)
         self.api_base = "https://api.cyberghost.com"
         self.secure_executor = SecureCommandExecutor()
+        
+        # Service status warning
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.warning("⚠️  CYBERGHOST SERVICE NOTICE ⚠️")
+        logger.warning("CyberGhost VPN is currently experiencing widespread service issues.")
+        logger.warning("Connection reliability may be affected. ETA for fix is unknown.")
+        logger.warning("For questions regarding CyberGhost services, please contact:")
+        logger.warning("🔗 CyberGhost Support: https://support.cyberghost.com/")
+        logger.warning("Try using ExpressVPN, Mullvad, ProtonVPN, or NordVPN instead.")
+        print("\n⚠️  CYBERGHOST SERVICE NOTICE ⚠️")
+        print("CyberGhost VPN is currently experiencing widespread service issues.")
+        print("Connection reliability may be affected. ETA for fix is unknown.")
+        print("For questions regarding CyberGhost services, please contact:")
+        print("🔗 CyberGhost Support: https://support.cyberghost.com/")
+        print("Try using ExpressVPN, Mullvad, ProtonVPN, or NordVPN instead.\n")
         self.client_config_path = config.get('config_path', '/usr/local/cyberghost')
         
     async def authenticate(self, username: str, password: str) -> bool:
