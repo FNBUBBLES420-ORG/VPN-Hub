@@ -278,34 +278,41 @@ class ProtonVPNProvider(VPNProviderInterface):
         return servers
     
     async def _get_basic_server_list(self, country: str = None) -> List[ServerInfo]:
-        """Get basic server list for trial/inactive users"""
+        """Get free server list for non-subscribers"""
         servers = []
         
-        # Basic server locations (free tier only)
-        basic_server_locations = [
+        # Free server locations (10 free servers available)
+        free_server_locations = [
             {"id": "JP-FREE#1", "name": "JP-FREE#1 (Free)", "country": "Japan", "city": "Tokyo", "load": 72},
-            {"id": "NL-FREE#1", "name": "NL-FREE#1 (Free)", "country": "Netherlands", "city": "Amsterdam", "load": 75},
-            {"id": "US-FREE#1", "name": "US-FREE#1 (Free)", "country": "United States", "city": "New York", "load": 78}
+            {"id": "JP-FREE#2", "name": "JP-FREE#2 (Free)", "country": "Japan", "city": "Tokyo", "load": 75},
+            {"id": "NL-FREE#1", "name": "NL-FREE#1 (Free)", "country": "Netherlands", "city": "Amsterdam", "load": 74},
+            {"id": "NL-FREE#2", "name": "NL-FREE#2 (Free)", "country": "Netherlands", "city": "Amsterdam", "load": 77},
+            {"id": "NL-FREE#3", "name": "NL-FREE#3 (Free)", "country": "Netherlands", "city": "Amsterdam", "load": 79},
+            {"id": "US-FREE#1", "name": "US-FREE#1 (Free)", "country": "United States", "city": "New York", "load": 78},
+            {"id": "US-FREE#2", "name": "US-FREE#2 (Free)", "country": "United States", "city": "New York", "load": 81},
+            {"id": "US-FREE#3", "name": "US-FREE#3 (Free)", "country": "United States", "city": "New York", "load": 76},
+            {"id": "US-FREE#4", "name": "US-FREE#4 (Free)", "country": "United States", "city": "New York", "load": 80},
+            {"id": "US-FREE#5", "name": "US-FREE#5 (Free)", "country": "United States", "city": "New York", "load": 83}
         ]
         
-        for server_data in basic_server_locations:
+        for server_data in free_server_locations:
             # Filter by country if specified
             if country and country.lower() not in server_data["country"].lower():
                 continue
                 
             server = ServerInfo(
                 id=server_data["id"],
-                name=server_data["name"] + " (Limited Speed)",
+                name=server_data["name"],
                 country=server_data["country"],
                 city=server_data["city"],
                 ip_address="",
                 load=server_data["load"],
                 protocols=[ProtocolType.OPENVPN],
-                features=["Basic Protection", "Limited Speed", "Medium Security"]
+                features=["Free Access", "Limited Speed", "Medium Security", "No Logs"]
             )
             servers.append(server)
         
-        print(f"ProtonVPN: Retrieved {len(servers)} servers (Free Tier - Consider subscribing for 1700+ servers)")
+        print(f"ProtonVPN: Retrieved {len(servers)} free servers (Subscribe for 1700+ premium servers in 65+ countries)")
         return servers
     
     async def check_subscription_status(self) -> bool:
@@ -351,7 +358,7 @@ class ProtonVPNProvider(VPNProviderInterface):
                 
                 for indicator in free_indicators:
                     if indicator in output:
-                        print("ProtonVPN: Free tier detected - Limited to 3 servers")
+                        print("ProtonVPN: Free tier detected - 10 free servers available")
                         return False
                 
                 # Check if logged in but unknown status
@@ -378,7 +385,7 @@ class ProtonVPNProvider(VPNProviderInterface):
             subscription_info = {
                 'active': False,
                 'plan': 'Free',
-                'server_count': '3 free servers',
+                'server_count': '10 free servers',
                 'features': ['Basic protection', 'Limited speed'],
                 'recommendation': 'Subscribe for 1700+ servers in 65+ countries'
             }
