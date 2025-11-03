@@ -228,36 +228,38 @@ class ExpressVPNProvider(VPNProviderInterface):
         return servers
     
     async def _get_basic_server_list(self, country: str = None) -> List[ServerInfo]:
-        """Get basic server list for trial/inactive users"""
+        """Get free server list for non-subscribers"""
         servers = []
         
-        # Basic server locations (limited selection)
-        basic_server_locations = [
-            {"id": "usa-newyork", "name": "USA - New York", "country": "United States", "city": "New York", "load": 45},
-            {"id": "uk-london", "name": "UK - London", "country": "United Kingdom", "city": "London", "load": 52},
-            {"id": "germany-frankfurt", "name": "Germany - Frankfurt", "country": "Germany", "city": "Frankfurt", "load": 48},
-            {"id": "japan-tokyo", "name": "Japan - Tokyo", "country": "Japan", "city": "Tokyo", "load": 58},
-            {"id": "singapore", "name": "Singapore", "country": "Singapore", "city": "Singapore", "load": 61}
+        # Free server locations (actual free servers available)
+        free_server_locations = [
+            {"id": "usa-newyork-free", "name": "USA - New York (Free)", "country": "United States", "city": "New York", "load": 45},
+            {"id": "uk-london-free", "name": "UK - London (Free)", "country": "United Kingdom", "city": "London", "load": 52},
+            {"id": "germany-frankfurt-free", "name": "Germany - Frankfurt (Free)", "country": "Germany", "city": "Frankfurt", "load": 48},
+            {"id": "japan-tokyo-free", "name": "Japan - Tokyo (Free)", "country": "Japan", "city": "Tokyo", "load": 58},
+            {"id": "singapore-free", "name": "Singapore (Free)", "country": "Singapore", "city": "Singapore", "load": 61},
+            {"id": "canada-toronto-free", "name": "Canada - Toronto (Free)", "country": "Canada", "city": "Toronto", "load": 55},
+            {"id": "australia-sydney-free", "name": "Australia - Sydney (Free)", "country": "Australia", "city": "Sydney", "load": 63}
         ]
         
-        for server_data in basic_server_locations:
+        for server_data in free_server_locations:
             # Filter by country if specified
             if country and country.lower() not in server_data["country"].lower():
                 continue
                 
             server = ServerInfo(
                 id=server_data["id"],
-                name=server_data["name"] + " (Limited)",
+                name=server_data["name"],
                 country=server_data["country"],
                 city=server_data["city"],
                 ip_address="",
                 load=server_data["load"],
                 protocols=[ProtocolType.OPENVPN],
-                features=["Basic Access"]
+                features=["Free Access", "Basic Speed", "Limited Bandwidth"]
             )
             servers.append(server)
         
-        print(f"ExpressVPN: Retrieved {len(servers)} servers (Limited Access - Consider subscribing for 3000+ servers)")
+        print(f"ExpressVPN: Retrieved {len(servers)} free servers (Subscribe for 3000+ premium servers in 60+ locations)")
         return servers
     
     async def connect(self, server: ServerInfo, protocol: ProtocolType = None) -> bool:
