@@ -28,39 +28,46 @@ class SecureCommandExecutor:
     ALLOWED_VPN_COMMANDS = {
         'nordvpn': {
             'allowed_subcommands': ['login', 'connect', 'disconnect', 'status', 'countries', 'cities', 'groups', 'logout'],
-            'credential_method': 'cli_args',  # Uses command line arguments
+            'credential_method': 'cli_args',
             'timeout': 30,
-            'executable_path': r'C:\Program Files\NordVPN\NordVPN.exe'  # Common NordVPN path
+            'executable_path': r'C:\Program Files\NordVPN\NordVPN.exe'
         },
         'expressvpn': {
-            'allowed_subcommands': [],  # GUI-only, no CLI subcommands
-            'credential_method': 'gui',  # Uses GUI for authentication
+            'allowed_subcommands': ['connect', 'disconnect', 'status', 'list', 'locations'],
+            'credential_method': 'cli',
             'timeout': 30,
-            'executable_path': r'C:\Program Files (x86)\ExpressVPN\expressvpn-ui\ExpressVPN.exe'
+            'executable_path': r'C:\Program Files (x86)\ExpressVPN\expressvpn-ui\ExpressVPN.exe',
+            'cli_path': r'C:\Program Files (x86)\ExpressVPN\services\ExpressVPN.CLI.exe'
         },
         'surfshark-vpn': {
             'allowed_subcommands': ['account', 'connect', 'disconnect', 'status', 'location'],
-            'credential_method': 'stdin',  # Uses stdin for credentials
+            'credential_method': 'stdin',
             'timeout': 30,
-            'executable_path': r'C:\Program Files\Surfshark\Surfshark.exe'  # Common Surfshark path
+            'executable_path': r'C:\Program Files\Surfshark\Surfshark.exe'
         },
         'cyberghost-vpn': {
             'allowed_subcommands': ['connect', 'disconnect', 'status', 'list'],
-            'credential_method': 'config',  # Uses config file
+            'credential_method': 'config',
             'timeout': 30,
-            'executable_path': r'C:\Program Files\CyberGhost 8\Dashboard.exe'  # CyberGhost Dashboard
+            'executable_path': r'C:\Program Files\CyberGhost 8\Dashboard.exe'
         },
         'cyberghost': {
             'allowed_subcommands': ['connect', 'disconnect', 'status', 'list'],
-            'credential_method': 'gui',  # GUI-based authentication
+            'credential_method': 'gui',
             'timeout': 30,
-            'executable_path': r'C:\Program Files\CyberGhost 8\Dashboard.exe'  # CyberGhost Dashboard
+            'executable_path': r'C:\Program Files\CyberGhost 8\Dashboard.exe'
         },
         'protonvpn': {
-            'allowed_subcommands': [],  # GUI-only, no CLI subcommands  
-            'credential_method': 'gui',  # Uses GUI for authentication
+            'allowed_subcommands': [],
+            'credential_method': 'gui',
             'timeout': 30,
-            'executable_path': r'C:\Program Files\Proton\VPN\ProtonVPN.Launcher.exe'  # ProtonVPN launcher
+            'executable_path': r'C:\Program Files\Proton\VPN\ProtonVPN.Launcher.exe'
+        },
+        'protonvpn-cli': {
+            'allowed_subcommands': ['status', 'connect', 'disconnect', 'logout', 'login', 'servers', 'countries', 'cities', 'plans'],
+            'credential_method': 'cli',
+            'timeout': 30,
+            'executable_path': r'C:\Program Files\ProtonVPN CLI\protonvpn-cli.exe'
         }
     }
     
