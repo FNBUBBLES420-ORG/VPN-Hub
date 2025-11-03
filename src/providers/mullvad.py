@@ -1,3 +1,6 @@
+# NOT FULLY SUPPORTED OR SETUP
+# STILL UPDATING
+
 """
 Mullvad VPN Provider Implementation
 Privacy-focused VPN provider with real server locations and reliable Windows CLI integration.
