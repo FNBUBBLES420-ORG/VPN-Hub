@@ -48,7 +48,13 @@ class SecureCommandExecutor:
             'allowed_subcommands': ['connect', 'disconnect', 'status', 'list'],
             'credential_method': 'config',  # Uses config file
             'timeout': 30,
-            'executable_path': r'C:\Program Files\CyberGhost 8\CyberGhost.exe'  # Common CyberGhost path
+            'executable_path': r'C:\Program Files\CyberGhost 8\Dashboard.exe'  # CyberGhost Dashboard
+        },
+        'cyberghost': {
+            'allowed_subcommands': ['connect', 'disconnect', 'status', 'list'],
+            'credential_method': 'gui',  # GUI-based authentication
+            'timeout': 30,
+            'executable_path': r'C:\Program Files\CyberGhost 8\Dashboard.exe'  # CyberGhost Dashboard
         },
         'protonvpn': {
             'allowed_subcommands': ['connect', 'disconnect', 'status', 'list', 'login', 'logout'],
@@ -342,10 +348,14 @@ password={password}
             Tuple of (success, message)
         """
         try:
-            # Sanitize inputs
+            # Sanitize inputs - check if this is a GUI-based provider
             provider = InputSanitizer.sanitize_provider_name(provider)
             username = InputSanitizer.sanitize_username(username)
-            password = InputSanitizer.sanitize_password(password)
+            
+            # Use GUI mode for providers that use GUI authentication
+            gui_providers = ['expressvpn', 'cyberghost', 'surfshark', 'protonvpn']
+            is_gui_mode = provider in gui_providers
+            password = InputSanitizer.sanitize_password(password, gui_mode=is_gui_mode)
             
             # Prepare authentication command based on provider
             if provider == 'nordvpn':
@@ -407,6 +417,18 @@ password={password}
                 else:
                     # Try CLI version - CyberGhost typically doesn't have CLI
                     return False, "CyberGhost CLI not available. Please install CyberGhost and use GUI authentication."
+            
+            elif provider == 'cyberghost':
+                # GUI-based authentication for CyberGhost
+                executable_path = self.ALLOWED_VPN_COMMANDS['cyberghost'].get('executable_path')
+                if executable_path and os.path.exists(executable_path):
+                    # Use GUI version
+                    command = [executable_path]
+                    return_code, stdout, stderr = await self.execute_vpn_command(command)
+                    success = True  # GUI launched successfully if no exception was thrown
+                    message = "CyberGhost GUI launched. Please authenticate through the application."
+                else:
+                    return False, "CyberGhost not found. Please install CyberGhost and try again."
             
             elif provider == 'protonvpn':
                 # Try GUI first, then CLI
