@@ -101,66 +101,53 @@ class VPNConnectionManager:
             self.logger.error(f"Error authenticating with {name}: {e}")
             return False
     
-    async def get_all_servers(self, country: str = None) -> Dict[str, List[ServerInfo]]:
-        """Get servers from all authenticated providers"""
+    async def get_all_servers(self, country: str = None, protocol: ProtocolType = None) -> Dict[str, List[ServerInfo]]:
+        """Get servers from all providers. For WireGuard, do not require authentication."""
         all_servers = {}
-        
         for name, provider in self.providers.items():
-            if provider.is_authenticated:
+            # For WireGuard, skip authentication check
+            if protocol == ProtocolType.WIREGUARD or getattr(provider, 'is_authenticated', False):
                 try:
                     # Special handling for ExpressVPN subscription verification
-                    if name.lower() == 'expressvpn' and hasattr(provider, 'check_subscription_status'):
-                        # Check subscription before loading servers
+                    if protocol != ProtocolType.WIREGUARD and name.lower() == 'expressvpn' and hasattr(provider, 'check_subscription_status'):
                         subscription_active = await provider.check_subscription_status()
                         if not subscription_active:
                             print(f"⚠️  ExpressVPN: Consider activating subscription for full access")
-                    
                     servers = await provider.get_servers(country)
                     all_servers[name] = servers
                     self.logger.info(f"Retrieved {len(servers)} servers from {name}")
                 except Exception as e:
                     self.logger.error(f"Error getting servers from {name}: {e}")
                     all_servers[name] = []
-        
         return all_servers
     
     async def connect_to_provider(self, provider_name: str, server: ServerInfo, 
                                 protocol: ProtocolType = None) -> bool:
-        """Connect to a specific provider and server"""
+        """Connect to a specific provider and server. For WireGuard, do not require authentication."""
         try:
             if provider_name not in self.providers:
                 self.logger.error(f"Provider {provider_name} not found")
                 return False
-            
             provider = self.providers[provider_name]
-            
-            if not provider.is_authenticated:
+            # For WireGuard, skip authentication check
+            if protocol != ProtocolType.WIREGUARD and not provider.is_authenticated:
                 self.logger.error(f"Provider {provider_name} not authenticated")
                 return False
-            
             # Disconnect from current provider if connected
             if self.active_provider:
                 await self.disconnect()
-            
             # Connect to new provider
             protocol = protocol or self.preferred_protocol
             success = await provider.connect(server, protocol)
-            
             if success:
                 self.active_provider = provider
                 self.logger.info(f"Connected to {provider_name} - {server.name}")
-                
-                # Record connection in history
                 self._record_connection(provider_name, server, protocol)
-                
-                # Notify callbacks
                 await self._notify_connection_callbacks("connected", provider_name, server)
-                
                 return True
             else:
                 self.logger.error(f"Failed to connect to {provider_name} - {server.name}")
                 return False
-                
         except Exception as e:
             self.logger.error(f"Error connecting to {provider_name}: {e}")
             return False
