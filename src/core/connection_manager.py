@@ -108,6 +108,13 @@ class VPNConnectionManager:
         for name, provider in self.providers.items():
             if provider.is_authenticated:
                 try:
+                    # Special handling for ExpressVPN subscription verification
+                    if name.lower() == 'expressvpn' and hasattr(provider, 'check_subscription_status'):
+                        # Check subscription before loading servers
+                        subscription_active = await provider.check_subscription_status()
+                        if not subscription_active:
+                            print(f"⚠️  ExpressVPN: Consider activating subscription for full access")
+                    
                     servers = await provider.get_servers(country)
                     all_servers[name] = servers
                     self.logger.info(f"Retrieved {len(servers)} servers from {name}")
