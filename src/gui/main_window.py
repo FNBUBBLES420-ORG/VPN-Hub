@@ -464,6 +464,9 @@ class VPNHubMainWindow(QMainWindow):
             "Provider", "Server", "Country", "City", "Load", "Features"
         ])
         
+        # Connect table selection to update combo boxes
+        self.servers_table.itemSelectionChanged.connect(self.on_server_table_selection_changed)
+        
         header = self.servers_table.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.Stretch)
         
@@ -521,6 +524,33 @@ class VPNHubMainWindow(QMainWindow):
         layout.addWidget(splitter)
         
         self.tab_widget.addTab(providers_widget, "Providers")
+        
+        # Connect provider selection to details display
+        self.providers_list.itemSelectionChanged.connect(self.on_provider_selected)
+
+    def on_provider_selected(self):
+        selected_items = self.providers_list.selectedItems()
+        if not selected_items:
+            self.provider_details.clear()
+            return
+        provider_name = selected_items[0].text()
+        details = self.get_provider_details(provider_name)
+        self.provider_details.setText(details)
+
+    def get_provider_details(self, provider_name):
+        # Example details for ExpressVPN
+        if provider_name.lower() == "expressvpn":
+            return (
+                "ExpressVPN\n"
+                "---------------------\n"
+                "Type: Commercial\n"
+                "Protocols: OpenVPN, Lightway\n"
+                "Platforms: Windows, macOS, Linux, iOS, Android\n"
+                "Website: https://www.expressvpn.com\n"
+                "Description: Fast, secure, and easy-to-use VPN service.\n"
+            )
+        # Default fallback
+        return f"Details for {provider_name}"
     
     def setup_security_tab(self):
         """Setup the security settings tab"""
@@ -780,12 +810,16 @@ class VPNHubMainWindow(QMainWindow):
         
         # Populate table with filtered servers
         for row, (provider_name, server) in enumerate(filtered_servers):
-            self.servers_table.setItem(row, 0, QTableWidgetItem(provider_name.title()))
+            provider_item = QTableWidgetItem(provider_name.title())
+            # Store both provider name and server object as user data
+            provider_item.setData(0x0100, (provider_name, server))  # Qt.UserRole
+            self.servers_table.setItem(row, 0, provider_item)
             self.servers_table.setItem(row, 1, QTableWidgetItem(server.name))
             self.servers_table.setItem(row, 2, QTableWidgetItem(server.country))
             self.servers_table.setItem(row, 3, QTableWidgetItem(server.city))
             self.servers_table.setItem(row, 4, QTableWidgetItem(f"{server.load}%"))
-            self.servers_table.setItem(row, 5, QTableWidgetItem(", ".join(server.features)))
+            features_text = ", ".join(server.features) if server.features else "Standard"
+            self.servers_table.setItem(row, 5, QTableWidgetItem(features_text))
         
         # Update country filter only when loading new data
         if update_filter:
@@ -824,6 +858,39 @@ class VPNHubMainWindow(QMainWindow):
         if hasattr(self, 'current_servers_data'):
             self.populate_servers_table(self.current_servers_data, update_filter=False)
     
+    def on_server_table_selection_changed(self):
+        """Handle server table selection changes and update combo boxes"""
+        selected_items = self.servers_table.selectedItems()
+        if not selected_items:
+            return
+        
+        # Get the row of the first selected item
+        current_row = selected_items[0].row()
+        
+        # Get the provider item (first column) which contains our stored data
+        provider_item = self.servers_table.item(current_row, 0)
+        if not provider_item:
+            return
+        
+        # Extract provider name and server object from user data
+        user_data = provider_item.data(0x0100)  # Qt.UserRole
+        if not user_data or len(user_data) != 2:
+            return
+        
+        provider_name, server = user_data
+        
+        # Update provider combo box
+        provider_index = self.provider_combo.findText(provider_name.title())
+        if provider_index >= 0:
+            self.provider_combo.setCurrentIndex(provider_index)
+        
+        # Update server combo box to match the selected server
+        for i in range(self.server_combo.count()):
+            combo_server = self.server_combo.itemData(i)
+            if combo_server and combo_server.id == server.id:
+                self.server_combo.setCurrentIndex(i)
+                break
+
     def connect(self):
         """Connect to selected server"""
         provider = self.provider_combo.currentText().lower()
