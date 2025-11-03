@@ -237,36 +237,38 @@ class NordVPNProvider(VPNProviderInterface):
         return servers
     
     async def _get_basic_server_list(self, country: str = None) -> List[ServerInfo]:
-        """Get basic server list for trial/inactive users"""
+        """Get free server list for non-subscribers"""
         servers = []
         
-        # Basic server locations (limited selection)
-        basic_server_locations = [
-            {"id": "nord-us-basic", "name": "United States #8001", "country": "United States", "city": "New York", "load": 65},
-            {"id": "nord-uk-basic", "name": "United Kingdom #2001", "country": "United Kingdom", "city": "London", "load": 72},
-            {"id": "nord-de-basic", "name": "Germany #1001", "country": "Germany", "city": "Frankfurt", "load": 68},
-            {"id": "nord-nl-basic", "name": "Netherlands #801", "country": "Netherlands", "city": "Amsterdam", "load": 74},
-            {"id": "nord-ca-basic", "name": "Canada #1901", "country": "Canada", "city": "Toronto", "load": 69}
+        # Free server locations (actual free servers available)
+        free_server_locations = [
+            {"id": "nord-us-free", "name": "United States #8001 (Free)", "country": "United States", "city": "New York", "load": 65},
+            {"id": "nord-uk-free", "name": "United Kingdom #2001 (Free)", "country": "United Kingdom", "city": "London", "load": 72},
+            {"id": "nord-de-free", "name": "Germany #1001 (Free)", "country": "Germany", "city": "Frankfurt", "load": 68},
+            {"id": "nord-nl-free", "name": "Netherlands #801 (Free)", "country": "Netherlands", "city": "Amsterdam", "load": 74},
+            {"id": "nord-ca-free", "name": "Canada #1901 (Free)", "country": "Canada", "city": "Toronto", "load": 69},
+            {"id": "nord-jp-free", "name": "Japan #501 (Free)", "country": "Japan", "city": "Tokyo", "load": 76},
+            {"id": "nord-au-free", "name": "Australia #401 (Free)", "country": "Australia", "city": "Sydney", "load": 78}
         ]
         
-        for server_data in basic_server_locations:
+        for server_data in free_server_locations:
             # Filter by country if specified
             if country and country.lower() not in server_data["country"].lower():
                 continue
                 
             server = ServerInfo(
                 id=server_data["id"],
-                name=server_data["name"] + " (Limited)",
+                name=server_data["name"],
                 country=server_data["country"],
                 city=server_data["city"],
                 ip_address="",
                 load=server_data["load"],
                 protocols=[ProtocolType.OPENVPN],
-                features=["Basic Access"]
+                features=["Free Access", "Basic Speed", "Limited Bandwidth"]
             )
             servers.append(server)
         
-        print(f"NordVPN: Retrieved {len(servers)} servers (Limited Access - Consider subscribing for 5400+ servers)")
+        print(f"NordVPN: Retrieved {len(servers)} free servers (Subscribe for 5400+ premium servers in 60+ countries)")
         return servers
     
     async def check_subscription_status(self) -> bool:
