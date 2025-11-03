@@ -57,10 +57,10 @@ class SecureCommandExecutor:
             'executable_path': r'C:\Program Files\CyberGhost 8\Dashboard.exe'  # CyberGhost Dashboard
         },
         'protonvpn': {
-            'allowed_subcommands': ['connect', 'disconnect', 'status', 'list', 'login', 'logout'],
-            'credential_method': 'cli_args',
+            'allowed_subcommands': [],  # GUI-only, no CLI subcommands  
+            'credential_method': 'gui',  # Uses GUI for authentication
             'timeout': 30,
-            'executable_path': r'C:\Program Files\ProtonVPN\ProtonVPN.exe'  # Common ProtonVPN path
+            'executable_path': r'C:\Program Files\Proton\VPN\ProtonVPN.Launcher.exe'  # ProtonVPN launcher
         }
     }
     
@@ -130,10 +130,33 @@ class SecureCommandExecutor:
                         sanitized_command.append(arg)
                         continue
                 
-                # Check for shell injection patterns for other arguments
-                for char in InputSanitizer.SHELL_INJECTION_CHARS:
-                    if char in arg:
-                        raise SecurityException(f"Command argument contains prohibited character: '{char}'")
+                # Special handling for credential arguments (username/password)
+                # For VPN login commands: protonvpn login <username> <password>
+                # NordVPN login --username <username> --password <password>
+                is_credential_arg = False
+                if len(command) >= 3:  # Minimum for login command
+                    # Check if this is a credential argument based on position and context
+                    if (command_key == 'protonvpn' and len(command) == 4 and 
+                        command[1] == 'login' and i >= 2):  # username or password
+                        is_credential_arg = True
+                    elif (command_key == 'nordvpn' and '--username' in command and '--password' in command):
+                        # Check if this arg follows --username or --password
+                        if i > 0 and command[i-1] in ['--username', '--password']:
+                            is_credential_arg = True
+                
+                if is_credential_arg:
+                    # For credentials, use less restrictive validation (already sanitized by sanitize_password)
+                    # Only block the most dangerous shell characters
+                    dangerous_chars = ['`', '|', ';', '<', '>', '\n', '\r', '\t']
+                    for char in dangerous_chars:
+                        if char in arg:
+                            raise SecurityException(f"Command argument contains prohibited character: '{char}'")
+                else:
+                    # For non-credential arguments, use full shell injection protection
+                    for char in InputSanitizer.SHELL_INJECTION_CHARS:
+                        if char in arg:
+                            raise SecurityException(f"Command argument contains prohibited character: '{char}'")
+                
                 sanitized_command.append(arg)
             
             # Set timeout
@@ -431,7 +454,7 @@ password={password}
                     return False, "CyberGhost not found. Please install CyberGhost and try again."
             
             elif provider == 'protonvpn':
-                # Try GUI first, then CLI
+                # GUI-based authentication for ProtonVPN
                 executable_path = self.ALLOWED_VPN_COMMANDS['protonvpn'].get('executable_path')
                 if executable_path and os.path.exists(executable_path):
                     # Use GUI version
@@ -440,11 +463,7 @@ password={password}
                     success = True  # GUI launched successfully if no exception was thrown
                     message = "ProtonVPN GUI launched. Please authenticate through the application."
                 else:
-                    # Try CLI version
-                    command = ['protonvpn', 'login', username, password]
-                    return_code, stdout, stderr = await self.execute_vpn_command(command)
-                    success = return_code == 0
-                    message = stdout if success else stderr
+                    return False, "ProtonVPN not found. Please install ProtonVPN and try again."
                 
             else:
                 raise SecurityException(f"Unsupported provider: {provider}")
