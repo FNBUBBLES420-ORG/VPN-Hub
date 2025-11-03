@@ -84,12 +84,13 @@ class InputSanitizer:
         return username
     
     @staticmethod
-    def sanitize_password(password: str) -> str:
+    def sanitize_password(password: str, gui_mode: bool = False) -> str:
         """
         Sanitize password input to prevent command injection
         
         Args:
             password: Raw password input
+            gui_mode: If True, allows more characters for GUI-based authentication
             
         Returns:
             Sanitized password
@@ -107,16 +108,35 @@ class InputSanitizer:
         if len(password) < 1:
             raise SecurityException("Password too short")
         
-        # Check for shell injection characters (more restrictive for passwords)
-        dangerous_chars = ['`', '$', '|', '&', ';', '<', '>', '\n', '\r', '\t']
-        for char in dangerous_chars:
-            if char in password:
-                raise SecurityException(f"Password contains prohibited character")
-        
-        # Check for command injection patterns
-        for pattern in InputSanitizer.COMMAND_INJECTION_PATTERNS:
-            if re.search(pattern, password, re.IGNORECASE):
-                raise SecurityException("Password contains suspicious patterns")
+        # For GUI mode, be very permissive since password is handled by GUI, not CLI
+        if gui_mode:
+            # Only block extremely dangerous characters that could never be in a password
+            dangerous_chars = ['\n', '\r', '\x00']  # Only newlines and null bytes
+            for char in dangerous_chars:
+                if char in password:
+                    raise SecurityException(f"Password contains prohibited character")
+            
+            # Only check for obvious command injection - be very conservative
+            if '`' in password and password.count('`') >= 2:
+                # Only block if there are paired backticks (command execution)
+                if re.search(r'`[^`]+`', password):
+                    raise SecurityException("Password contains command execution pattern")
+            
+            # Check for command substitution with $( only
+            if '$(' in password and ')' in password:
+                if re.search(r'\$\([^)]*\)', password):
+                    raise SecurityException("Password contains command substitution pattern")
+        else:
+            # Standard CLI mode - more restrictive
+            dangerous_chars = ['`', '$', '|', '&', ';', '<', '>', '\n', '\r', '\t']
+            for char in dangerous_chars:
+                if char in password:
+                    raise SecurityException(f"Password contains prohibited character")
+            
+            # Check for command injection patterns
+            for pattern in InputSanitizer.COMMAND_INJECTION_PATTERNS:
+                if re.search(pattern, password, re.IGNORECASE):
+                    raise SecurityException("Password contains suspicious patterns")
         
         # Check for null bytes
         if '\x00' in password:
