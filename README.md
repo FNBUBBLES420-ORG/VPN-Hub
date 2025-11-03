@@ -339,6 +339,11 @@ This application is designed for legitimate privacy and security purposes. Users
 ---
 
 **🔒 Security Status: ENTERPRISE-GRADE HARDENED**  
-*Last Security Audit: November 1, 2025*  
+*Last Security Audit: November 3, 2025*  
 *All security modules tested and validated*  
 *Zero critical vulnerabilities remaining*
+
+## WireGuard Support
+
+See [docs/WIREGUARD_SUPPORT.md](docs/WIREGUARD_SUPPORT.md) for details on WireGuard requirements and setup.
+
