@@ -29,27 +29,32 @@ class SecureCommandExecutor:
         'nordvpn': {
             'allowed_subcommands': ['login', 'connect', 'disconnect', 'status', 'countries', 'cities', 'groups', 'logout'],
             'credential_method': 'cli_args',  # Uses command line arguments
-            'timeout': 30
+            'timeout': 30,
+            'executable_path': r'C:\Program Files\NordVPN\NordVPN.exe'  # Common NordVPN path
         },
         'expressvpn': {
-            'allowed_subcommands': ['connect', 'disconnect', 'list', 'status', 'preferences', 'activate'],
-            'credential_method': 'stdin',  # Uses stdin for credentials
-            'timeout': 30
+            'allowed_subcommands': [],  # GUI-only, no CLI subcommands
+            'credential_method': 'gui',  # Uses GUI for authentication
+            'timeout': 30,
+            'executable_path': r'C:\Program Files (x86)\ExpressVPN\expressvpn-ui\ExpressVPN.exe'
         },
         'surfshark-vpn': {
             'allowed_subcommands': ['account', 'connect', 'disconnect', 'status', 'location'],
             'credential_method': 'stdin',  # Uses stdin for credentials
-            'timeout': 30
+            'timeout': 30,
+            'executable_path': r'C:\Program Files\Surfshark\Surfshark.exe'  # Common Surfshark path
         },
         'cyberghost-vpn': {
             'allowed_subcommands': ['connect', 'disconnect', 'status', 'list'],
             'credential_method': 'config',  # Uses config file
-            'timeout': 30
+            'timeout': 30,
+            'executable_path': r'C:\Program Files\CyberGhost 8\CyberGhost.exe'  # Common CyberGhost path
         },
         'protonvpn': {
             'allowed_subcommands': ['connect', 'disconnect', 'status', 'list', 'login', 'logout'],
             'credential_method': 'cli_args',
-            'timeout': 30
+            'timeout': 30,
+            'executable_path': r'C:\Program Files\ProtonVPN\ProtonVPN.exe'  # Common ProtonVPN path
         }
     }
     
@@ -84,25 +89,42 @@ class SecureCommandExecutor:
             if not all(isinstance(arg, str) for arg in command):
                 raise SecurityException("All command arguments must be strings")
             
-            # Get base command
+            # Get base command - handle full paths for GUI applications
             base_command = command[0]
             
+            # Check if this is a full path to a known VPN executable
+            command_key = None
+            for vpn_name, vpn_config in self.ALLOWED_VPN_COMMANDS.items():
+                if 'executable_path' in vpn_config and base_command == vpn_config['executable_path']:
+                    command_key = vpn_name
+                    break
+                elif base_command == vpn_name:
+                    command_key = vpn_name
+                    break
+            
             # Validate against whitelist
-            if base_command not in self.ALLOWED_VPN_COMMANDS:
+            if command_key is None:
                 raise SecurityException(f"Command '{base_command}' is not allowed")
             
-            command_config = self.ALLOWED_VPN_COMMANDS[base_command]
+            command_config = self.ALLOWED_VPN_COMMANDS[command_key]
             
-            # Validate subcommands
-            if len(command) > 1:
+            # Validate subcommands (skip for GUI applications)
+            if len(command) > 1 and command_config.get('credential_method') != 'gui':
                 subcommand = command[1]
                 if subcommand not in command_config['allowed_subcommands']:
-                    raise SecurityException(f"Subcommand '{subcommand}' not allowed for '{base_command}'")
+                    raise SecurityException(f"Subcommand '{subcommand}' not allowed for '{command_key}'")
             
             # Sanitize all command arguments
             sanitized_command = []
-            for arg in command:
-                # Check for shell injection patterns
+            for i, arg in enumerate(command):
+                # For the first argument (executable path), allow legitimate VPN executable paths
+                if i == 0 and command_key and 'executable_path' in command_config:
+                    # This is a known VPN executable path - validate it's exactly what we expect
+                    if arg == command_config['executable_path']:
+                        sanitized_command.append(arg)
+                        continue
+                
+                # Check for shell injection patterns for other arguments
                 for char in InputSanitizer.SHELL_INJECTION_CHARS:
                     if char in arg:
                         raise SecurityException(f"Command argument contains prohibited character: '{char}'")
@@ -327,25 +349,83 @@ password={password}
             
             # Prepare authentication command based on provider
             if provider == 'nordvpn':
-                command = ['nordvpn', 'login', '--username', username, '--password', password]
-                return_code, stdout, stderr = await self.execute_vpn_command(command)
+                # Try CLI first, then GUI if CLI not available
+                executable_path = self.ALLOWED_VPN_COMMANDS['nordvpn'].get('executable_path')
+                if executable_path and os.path.exists(executable_path):
+                    # Use GUI version
+                    command = [executable_path]
+                    return_code, stdout, stderr = await self.execute_vpn_command(command)
+                    success = True  # GUI launched successfully if no exception was thrown
+                    message = "NordVPN GUI launched. Please authenticate through the application."
+                else:
+                    # Try CLI version
+                    command = ['nordvpn', 'login', '--username', username, '--password', password]
+                    return_code, stdout, stderr = await self.execute_vpn_command(command)
+                    success = return_code == 0
+                    message = stdout if success else stderr
                 
             elif provider == 'expressvpn':
-                command = ['expressvpn', 'activate']
-                credentials = {'username': username, 'password': password}
-                return_code, stdout, stderr = await self.execute_vpn_command(command, credentials)
+                # ExpressVPN uses GUI authentication - launch the application
+                executable_path = self.ALLOWED_VPN_COMMANDS['expressvpn'].get('executable_path', 'expressvpn')
+                if not os.path.exists(executable_path):
+                    return False, f"ExpressVPN not found at {executable_path}. Please install ExpressVPN."
+                
+                # Launch ExpressVPN GUI for authentication
+                command = [executable_path]
+                return_code, stdout, stderr = await self.execute_vpn_command(command)
+                
+                # For GUI apps, any launch attempt is considered success (app may exit after launching GUI)
+                success = True  # GUI launched successfully if no exception was thrown
+                message = "ExpressVPN GUI launched. Please authenticate through the application."
                 
             elif provider == 'surfshark-vpn':
-                command = ['surfshark-vpn', 'account', 'login']
-                credentials = {'username': username, 'password': password}
-                return_code, stdout, stderr = await self.execute_vpn_command(command, credentials)
+                # Try GUI first, then CLI
+                executable_path = self.ALLOWED_VPN_COMMANDS['surfshark-vpn'].get('executable_path')
+                if executable_path and os.path.exists(executable_path):
+                    # Use GUI version
+                    command = [executable_path]
+                    return_code, stdout, stderr = await self.execute_vpn_command(command)
+                    success = True  # GUI launched successfully if no exception was thrown
+                    message = "Surfshark GUI launched. Please authenticate through the application."
+                else:
+                    # Try CLI version
+                    command = ['surfshark-vpn', 'account', 'login']
+                    credentials = {'username': username, 'password': password}
+                    return_code, stdout, stderr = await self.execute_vpn_command(command, credentials)
+                    success = return_code == 0
+                    message = stdout if success else stderr
+            
+            elif provider == 'cyberghost-vpn':
+                # Try GUI first, then CLI
+                executable_path = self.ALLOWED_VPN_COMMANDS['cyberghost-vpn'].get('executable_path')
+                if executable_path and os.path.exists(executable_path):
+                    # Use GUI version
+                    command = [executable_path]
+                    return_code, stdout, stderr = await self.execute_vpn_command(command)
+                    success = True  # GUI launched successfully if no exception was thrown
+                    message = "CyberGhost GUI launched. Please authenticate through the application."
+                else:
+                    # Try CLI version - CyberGhost typically doesn't have CLI
+                    return False, "CyberGhost CLI not available. Please install CyberGhost and use GUI authentication."
+            
+            elif provider == 'protonvpn':
+                # Try GUI first, then CLI
+                executable_path = self.ALLOWED_VPN_COMMANDS['protonvpn'].get('executable_path')
+                if executable_path and os.path.exists(executable_path):
+                    # Use GUI version
+                    command = [executable_path]
+                    return_code, stdout, stderr = await self.execute_vpn_command(command)
+                    success = True  # GUI launched successfully if no exception was thrown
+                    message = "ProtonVPN GUI launched. Please authenticate through the application."
+                else:
+                    # Try CLI version
+                    command = ['protonvpn', 'login', username, password]
+                    return_code, stdout, stderr = await self.execute_vpn_command(command)
+                    success = return_code == 0
+                    message = stdout if success else stderr
                 
             else:
                 raise SecurityException(f"Unsupported provider: {provider}")
-            
-            # Evaluate authentication result
-            success = return_code == 0
-            message = stdout if success else stderr
             
             # Log authentication attempt (without credentials)
             user_hash = InputSanitizer.hash_sensitive_data(username)
