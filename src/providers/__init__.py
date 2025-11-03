@@ -11,6 +11,7 @@ try:
     from .surfshark import SurfsharkProvider
     from .cyberghost import CyberGhostProvider
     from .protonvpn import ProtonVPNProvider
+    from .mullvad import MullvadProvider
 except ImportError:
     # Handle imports when running as standalone script
     import sys
@@ -24,6 +25,7 @@ except ImportError:
     from providers.surfshark import SurfsharkProvider
     from providers.cyberghost import CyberGhostProvider
     from providers.protonvpn import ProtonVPNProvider
+    from providers.mullvad import MullvadProvider
 
 class VPNProviderFactory:
     """Factory class for creating VPN provider instances"""
@@ -34,6 +36,7 @@ class VPNProviderFactory:
         "surfshark": SurfsharkProvider,
         "cyberghost": CyberGhostProvider,
         "protonvpn": ProtonVPNProvider,
+        "mullvad": MullvadProvider,
     }
     
     @classmethod
