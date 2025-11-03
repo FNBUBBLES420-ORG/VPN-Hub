@@ -166,6 +166,7 @@ class VPNHubMainWindow(QMainWindow):
         self.manager = VPNConnectionManager()
         self.worker = ConnectionWorker(self.manager)
         self.settings = QSettings("VPNHub", "VPNHubApp")
+        self.current_servers_data = {}  # Store loaded servers for filtering
         
         self.setup_ui()
         self.setup_system_tray()
@@ -445,6 +446,7 @@ class VPNHubMainWindow(QMainWindow):
         
         self.country_filter = QComboBox()
         self.country_filter.addItem("All Countries")
+        self.country_filter.currentTextChanged.connect(self.filter_servers_by_country)
         filter_layout.addWidget(self.country_filter)
         
         self.load_servers_btn = QPushButton("Load Servers")
@@ -741,12 +743,85 @@ class VPNHubMainWindow(QMainWindow):
     
     def on_servers_loaded(self, servers_data):
         """Handle loaded servers data"""
+        # Store servers data for filtering
+        self.current_servers_data = servers_data
+        
+        # Update the dropdown for quick connect
         self.server_combo.clear()
         
         provider = self.provider_combo.currentText().lower()
         if provider in servers_data:
             for server in servers_data[provider]:
                 self.server_combo.addItem(f"{server.name} ({server.country})", server)
+        
+        # Populate the servers table with all servers from all providers
+        self.populate_servers_table(servers_data)
+    
+    def populate_servers_table(self, servers_data, update_filter=True):
+        """Populate the servers table with server data"""
+        # Clear existing data
+        self.servers_table.setRowCount(0)
+        
+        # Get country filter
+        country_filter = self.country_filter.currentText()
+        
+        # Collect filtered servers first
+        filtered_servers = []
+        for provider_name, servers in servers_data.items():
+            for server in servers:
+                # Apply country filter
+                if country_filter != "All Countries" and server.country != country_filter:
+                    continue
+                filtered_servers.append((provider_name, server))
+        
+        # Set correct row count
+        self.servers_table.setRowCount(len(filtered_servers))
+        
+        # Populate table with filtered servers
+        for row, (provider_name, server) in enumerate(filtered_servers):
+            self.servers_table.setItem(row, 0, QTableWidgetItem(provider_name.title()))
+            self.servers_table.setItem(row, 1, QTableWidgetItem(server.name))
+            self.servers_table.setItem(row, 2, QTableWidgetItem(server.country))
+            self.servers_table.setItem(row, 3, QTableWidgetItem(server.city))
+            self.servers_table.setItem(row, 4, QTableWidgetItem(f"{server.load}%"))
+            self.servers_table.setItem(row, 5, QTableWidgetItem(", ".join(server.features)))
+        
+        # Update country filter only when loading new data
+        if update_filter:
+            self.update_country_filter(servers_data)
+    
+    def update_country_filter(self, servers_data):
+        """Update country filter dropdown with available countries"""
+        countries = set()
+        for servers in servers_data.values():
+            for server in servers:
+                countries.add(server.country)
+        
+        # Clear and repopulate country filter
+        current_country = self.country_filter.currentText()
+        
+        # Temporarily disconnect signal to prevent recursion
+        self.country_filter.currentTextChanged.disconnect()
+        
+        self.country_filter.clear()
+        self.country_filter.addItem("All Countries")
+        
+        for country in sorted(countries):
+            self.country_filter.addItem(country)
+        
+        # Restore previous selection if it exists
+        if current_country in countries:
+            index = self.country_filter.findText(current_country)
+            if index >= 0:
+                self.country_filter.setCurrentIndex(index)
+        
+        # Reconnect signal
+        self.country_filter.currentTextChanged.connect(self.filter_servers_by_country)
+    
+    def filter_servers_by_country(self):
+        """Filter servers table by selected country"""
+        if hasattr(self, 'current_servers_data'):
+            self.populate_servers_table(self.current_servers_data, update_filter=False)
     
     def connect(self):
         """Connect to selected server"""
