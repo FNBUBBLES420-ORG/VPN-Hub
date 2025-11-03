@@ -772,20 +772,29 @@ class VPNHubMainWindow(QMainWindow):
             self.worker.set_operation("load_servers")
             self.worker.start()
     
+    def refresh_wireguard_configs(self):
+        """Scan config folder for WireGuard .conf files and return tunnel names."""
+        import os, glob
+        config_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'config')
+        conf_files = glob.glob(os.path.join(config_dir, 'wg-*.conf'))
+        tunnel_names = [os.path.splitext(os.path.basename(f))[0] for f in conf_files]
+        return tunnel_names
+
     def on_servers_loaded(self, servers_data):
         """Handle loaded servers data"""
-        # Store servers data for filtering
         self.current_servers_data = servers_data
-        
-        # Update the dropdown for quick connect
         self.server_combo.clear()
-        
         provider = self.provider_combo.currentText().lower()
-        if provider in servers_data:
-            for server in servers_data[provider]:
-                self.server_combo.addItem(f"{server.name} ({server.country})", server)
-        
-        # Populate the servers table with all servers from all providers
+        protocol_text = self.protocol_combo.currentText()
+        # Auto-detect WireGuard configs and show tunnel names if WireGuard selected
+        if provider == "protonvpn" and protocol_text == "WireGuard":
+            tunnel_names = self.refresh_wireguard_configs()
+            for tunnel_name in tunnel_names:
+                self.server_combo.addItem(tunnel_name, tunnel_name)
+        else:
+            if provider in servers_data:
+                for server in servers_data[provider]:
+                    self.server_combo.addItem(f"{server.name} ({server.country})", server)
         self.populate_servers_table(servers_data)
     
     def populate_servers_table(self, servers_data, update_filter=True):
@@ -892,7 +901,7 @@ class VPNHubMainWindow(QMainWindow):
                 break
 
     def connect(self):
-        """Connect to selected server"""
+        """Connect to selected server or WireGuard tunnel"""
         provider = self.provider_combo.currentText().lower()
         server_data = self.server_combo.currentData()
         protocol_text = self.protocol_combo.currentText()
@@ -902,18 +911,34 @@ class VPNHubMainWindow(QMainWindow):
             return
         
         protocol = None
-        if protocol_text != "Auto":
+        # If WireGuard, build a dummy ServerInfo for tunnel name
+        if provider == "protonvpn" and protocol_text == "WireGuard":
+            from core.vpn_interface import ServerInfo, ProtocolType
+            tunnel_name = server_data
+            protocol = ProtocolType.WIREGUARD
+            # Remove any duplicate 'wg-' prefix
+            config_id = tunnel_name
+            if config_id.startswith('wg-'):
+                config_id = config_id[3:]
+            server = ServerInfo(
+                id=config_id,
+                name=tunnel_name,
+                country="WireGuard",
+                city="",
+                ip_address="",
+                load=0,
+                protocols=[ProtocolType.WIREGUARD],
+                features=["WireGuard"]
+            )
+            self.worker.set_operation("connect", provider=provider, server=server, protocol=protocol)
+        else:
             protocol_map = {
                 "OpenVPN": ProtocolType.OPENVPN,
                 "WireGuard": ProtocolType.WIREGUARD,
                 "IKEv2": ProtocolType.IKEV2
             }
             protocol = protocol_map.get(protocol_text)
-        
-        self.connect_btn.setEnabled(False)
-        self.status_label.setText("🟡 Connecting...")
-        
-        self.worker.set_operation("connect", provider=provider, server=server_data, protocol=protocol)
+            self.worker.set_operation("connect", provider=provider, server=server_data, protocol=protocol)
         self.worker.start()
     
     def disconnect(self):
@@ -945,13 +970,17 @@ class VPNHubMainWindow(QMainWindow):
             self.connect_btn.setEnabled(True)
             self.disconnect_btn.setEnabled(True)
             self.quick_disconnect_btn.setEnabled(True)
+            QMessageBox.information(self, "Connection Status", message)
         else:
             self.status_label.setText("🔴 Disconnected")
             self.connect_btn.setEnabled(True)
             self.disconnect_btn.setEnabled(False)
             self.quick_disconnect_btn.setEnabled(False)
-        
-        QMessageBox.information(self, "Connection Status", message)
+            # Show specific error for missing WireGuard config
+            if "WireGuard config file not found" in message or "WireGuard config file missing" in message:
+                QMessageBox.critical(self, "WireGuard Error", message)
+            else:
+                QMessageBox.information(self, "Connection Status", message)
     
     def on_status_update(self, status_data):
         """Handle status update"""
