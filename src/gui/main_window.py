@@ -910,10 +910,12 @@ class VPNHubMainWindow(QMainWindow):
             QMessageBox.warning(self, "Warning", "Please select a provider and server")
             return
         
+        # Ensure ProtocolType is imported for all cases
+        from core.vpn_interface import ProtocolType
         protocol = None
         # If WireGuard, build a dummy ServerInfo for tunnel name
         if provider == "protonvpn" and protocol_text == "WireGuard":
-            from core.vpn_interface import ServerInfo, ProtocolType
+            from core.vpn_interface import ServerInfo
             tunnel_name = server_data
             protocol = ProtocolType.WIREGUARD
             # Remove any duplicate 'wg-' prefix
@@ -985,9 +987,18 @@ class VPNHubMainWindow(QMainWindow):
     def on_status_update(self, status_data):
         """Handle status update"""
         status = status_data.get('status', 'disconnected')
-        server = status_data.get('server', 'None')
+        server = status_data.get('server', None)
         ip = status_data.get('ip', 'Unknown')
-        
+        protocol = status_data.get('protocol', None)
+
+        # If WireGuard, show disconnected if tunnel is not running
+        if protocol == 'wireguard' or (server and 'WireGuard' in str(server)):
+            if status != 'connected':
+                self.status_label.setText("🔴 Disconnected")
+                self.provider_label.setText("Provider: None")
+                self.ip_label.setText("IP: Unknown")
+                return
+        # Normal status update
         if status == 'connected':
             self.status_label.setText("🟢 Connected")
             self.provider_label.setText(f"Provider: {self.provider_combo.currentText()}")
