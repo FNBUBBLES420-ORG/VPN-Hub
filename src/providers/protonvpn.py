@@ -584,19 +584,29 @@ class ProtonVPNProvider(VPNProviderInterface):
                     if not os.path.isfile(config_path) and server.id.startswith('NL-FREE'):
                         config_filename = 'wg-NL-FREE-219.conf'
                         config_path = os.path.join(config_dir, config_filename)
-                    if os.path.isfile(config_path):
-                        tunnel_name = os.path.splitext(config_filename)[0]
-                        import subprocess
-                        try:
+                    tunnel_name = os.path.splitext(config_filename)[0]
+                    import subprocess
+                    try:
+                        # Only try to uninstall if tunnel is actually installed
+                        result = subprocess.run([
+                            "wireguard.exe", "/listtunnels"
+                        ], capture_output=True, text=True)
+                        tunnels = [t.strip() for t in result.stdout.splitlines()]
+                        if tunnel_name in tunnels:
                             result = subprocess.run([
                                 "wireguard.exe", "/uninstalltunnelservice", tunnel_name
                             ], check=True)
                             self.connection_info.status = ConnectionStatus.DISCONNECTED
                             self.connection_info.server = None
                             return result.returncode == 0
-                        except Exception as e:
-                            print(f"WireGuard disconnect error: {e}")
-                            return False
+                        else:
+                            print(f"WireGuard tunnel {tunnel_name} is not installed, skipping uninstall.")
+                            self.connection_info.status = ConnectionStatus.DISCONNECTED
+                            self.connection_info.server = None
+                            return True
+                    except Exception as e:
+                        print(f"WireGuard disconnect error: {e}")
+                        return False
                 print("WireGuard disconnect: No config file found for uninstall.")
                 return False
             # Otherwise, use ProtonVPN CLI
