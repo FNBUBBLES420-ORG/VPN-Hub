@@ -27,7 +27,7 @@ Get up and running in under 5 minutes:
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/Fnbubbles420-org/vpn-hub.git
+git clone https://github.com/FNBUBBLES420-ORG/VPN-Hub.git
 cd vpn-hub
 pip install -r requirements.txt
 
@@ -346,4 +346,5 @@ This application is designed for legitimate privacy and security purposes. Users
 ## WireGuard Support
 
 See [docs/WIREGUARD_SUPPORT.md](docs/WIREGUARD_SUPPORT.md) for details on WireGuard requirements and setup.
+
 
