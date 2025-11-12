@@ -71,8 +71,11 @@ python src/main.py
 - **✅ NordVPN**: Secure authentication with credential protection
 - **✅ ExpressVPN**: Enhanced connection security with certificate pinning
 - **✅ Surfshark**: Hardened provider integration with input validation
+  > surfshark has issues with their vpn service. 
 - **✅ CyberGhost**: Secure protocol implementation with enhanced security features
+  > cyberghost has issues with their vpn service.
 - **✅ ProtonVPN**: Privacy-focused with Secure Core, NetShield, and Tor support
+- **✅ mullvadVPN**
 
 ### **Professional GUI Interface**
 - **Modern Dark Theme**: Professional appearance with intuitive controls
@@ -346,5 +349,6 @@ This application is designed for legitimate privacy and security purposes. Users
 ## WireGuard Support
 
 See [docs/WIREGUARD_SUPPORT.md](docs/WIREGUARD_SUPPORT.md) for details on WireGuard requirements and setup.
+
 
 
