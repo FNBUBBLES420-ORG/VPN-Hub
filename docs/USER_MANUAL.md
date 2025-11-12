@@ -668,5 +668,6 @@ python src/utils/collect_logs.py --output support_logs.zip
 ---
 
 **User Manual Version:** 2.0  
-**Last Updated:** November 1, 2025  
+**App Version:** 1.0.6  
+**Last Updated:** November 12, 2025  
 **For Support:** support@vpnhub.local
