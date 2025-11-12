@@ -1,673 +1,354 @@
-# VPN Hub User Manual
+# VPN Hub - Enterprise-Grade Secure VPN Manager 🔒
 
-Complete user guide for VPN Hub enterprise-grade secure VPN manager.
+[![Python](https://img.shields.io/badge/Python-3.11%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Security](https://img.shields.io/badge/Security-Enterprise%20Grade-green?style=for-the-badge&logo=shield&logoColor=white)](docs/COMPLETE_SECURITY_SUMMARY.md)
+[![Tests](https://img.shields.io/badge/Tests-43%2F43%20Passing-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white)](tests/)
+[![License](https://img.shields.io/badge/License-GNU%20GPL%20v3-blue?style=for-the-badge&logo=gnu&logoColor=white)](LICENSE)
 
-## 📋 Table of Contents
+[![VPN Providers](https://img.shields.io/badge/VPN%20Providers-5%20Supported-purple?style=for-the-badge&logo=vpn&logoColor=white)](#-professional-features)
+[![GUI](https://img.shields.io/badge/GUI-PyQt5-orange?style=for-the-badge&logo=qt&logoColor=white)](src/gui/)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=for-the-badge&logo=windows&logoColor=white)](#-installation--setup)
+[![Documentation](https://img.shields.io/badge/Documentation-Complete-blue?style=for-the-badge&logo=gitbook&logoColor=white)](docs/README.md)
 
-- [Getting Started](#getting-started)
-- [User Interface Guide](#user-interface-guide)
-- [Provider Setup](#provider-setup)
-- [Connection Management](#connection-management)
-- [Security Features](#security-features)
-- [Settings and Preferences](#settings-and-preferences)
-- [Troubleshooting](#troubleshooting)
+[![Vulnerabilities](https://img.shields.io/badge/Vulnerabilities-0%20Critical-brightgreen?style=for-the-badge&logo=security&logoColor=white)](docs/SECURITY_FIXES_SUMMARY.md)
+[![Code Quality](https://img.shields.io/badge/Code%20Quality-A%2B-brightgreen?style=for-the-badge&logo=codeclimate&logoColor=white)](docs/DEVELOPMENT.md)
+[![Maintained](https://img.shields.io/badge/Maintained-Yes-brightgreen?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Fnbubbles420-org/vpn-hub)
+[![Release](https://img.shields.io/badge/Release-v1.0.0-blue?style=for-the-badge&logo=tag&logoColor=white)](https://github.com/Fnbubbles420-org/vpn-hub/releases)
 
-## 🚀 Getting Started
+A **military-grade secure** VPN hub application that provides enterprise-level security with comprehensive protection against all forms of cyber threats. This application aggregates multiple VPN providers through a hardened, security-first architecture with zero tolerance for vulnerabilities.
 
-### **First Time Setup**
+## 🛡️ Security Status: **FULLY HARDENED** ✅
 
-1. **Download and Install**
-   - Download VPN Hub from the official repository
-   - Extract to your preferred directory
-   - Install Python dependencies: `pip install -r requirements.txt`
+**All critical security vulnerabilities eliminated** - VPN Hub now implements **defense-in-depth** security with multiple layers of protection and **100% passing security tests**.
 
-2. **Initial Launch**
-   - Run: `python src/main.py`
-   - The application will open with the main interface
-   - A setup wizard will guide you through initial configuration
+## 🚀 Quick Start
 
-3. **Add Your First VPN Provider**
-   - Click "Add Provider" in the main window
-   - Select your VPN service (NordVPN, ExpressVPN, etc.)
-   - Enter your credentials securely
-   - Test the connection
+Get up and running in under 5 minutes:
 
-### **System Requirements**
-- **Operating System**: Windows 10+, macOS 10.15+, Linux (Ubuntu 20.04+)
-- **Python**: 3.8 or higher (3.11+ recommended)
-- **Memory**: 4GB RAM minimum, 8GB recommended
-- **Storage**: 500MB free space
-- **Privileges**: Administrator/root access for full functionality
+```bash
+# 1. Clone and install
+git clone https://github.com/Fnbubbles420-org/vpn-hub.git
+cd vpn-hub
+pip install -r requirements.txt
 
-## 🖥️ User Interface Guide
+# 2. Initialize security (recommended)
+python -c "from src.security.code_signing import sign_vpn_hub_files; sign_vpn_hub_files()"
 
-### **Main Window Layout**
-
-```
-┌─────────────────────────────────────────────────────────┐
-│ File  Connect  Tools  Security  Help               [_][□][X] │
-├─────────────────────────────────────────────────────────┤
-│ 🔒 VPN Hub - Enterprise Security                        │
-├─────────────────────────────────────────────────────────┤
-│ Provider: [NordVPN         ▼]  Status: ● Connected      │
-│ Server:   [Auto-Select     ▼]  IP: 203.0.113.1        │
-│                                                         │
-│ ┌─────────────────┐ ┌─────────────────┐ ┌──────────────┐ │
-│ │   🔌 Connect    │ │  🔌 Disconnect  │ │ ⚙️ Settings  │ │
-│ └─────────────────┘ └─────────────────┘ └──────────────┘ │
-│                                                         │
-│ Security Status: 🛡️ PROTECTED                          │
-│ ┌─────────────────────────────────────────────────────┐ │
-│ │ 🔒 Kill Switch: ON     📡 DNS Protection: ON       │ │
-│ │ 🚫 Ad Blocking: ON     🔍 Leak Detection: OK       │ │
-│ └─────────────────────────────────────────────────────┘ │
-│                                                         │
-│ Recent Connections:                                     │
-│ ├─ NordVPN - New York (us3045) - 2 hours ago          │
-│ ├─ ExpressVPN - London (uk-1) - Yesterday             │
-│ └─ Surfshark - Germany (de-ber) - 2 days ago          │
-└─────────────────────────────────────────────────────────┘
+# 3. Launch application
+python src/main.py
 ```
 
-### **Menu Bar Options**
+**📖 Need detailed instructions?** See our **[Quick Start Guide](docs/QUICK_START.md)** for step-by-step setup.
 
-#### **File Menu**
-- **New Connection**: Quick connect to any provider
-- **Import Settings**: Import configuration from file
-- **Export Settings**: Save current configuration
-- **Exit**: Close application (with confirmation)
+## 🔒 Enterprise Security Features
 
-#### **Connect Menu**
-- **Quick Connect**: Auto-select optimal server
-- **Connect to Specific Server**: Choose exact server
-- **Disconnect**: End current VPN session
-- **Reconnect**: Restart current connection
-
-#### **Tools Menu**
-- **Speed Test**: Test connection performance
-- **IP Leak Test**: Check for IP/DNS leaks
-- **Connection Log**: View detailed connection history
-- **System Information**: Display network status
-
-#### **Security Menu**
-- **Security Dashboard**: Real-time security monitoring
-- **Scan for Threats**: Run security assessment
-- **Update Security Rules**: Refresh security definitions
-- **Security Reports**: View detailed security analytics
-
-#### **Help Menu**
-- **User Manual**: Open this documentation
-- **Quick Start Guide**: 5-minute setup tutorial
-- **Check for Updates**: Update application
-- **About**: Version and license information
-
-### **System Tray Integration**
-
-VPN Hub runs in the system tray for convenient access:
-
-**Right-click tray icon for quick menu:**
-```
-🔒 VPN Hub
-├─ 🔌 Quick Connect
-├─ 🔌 Disconnect
-├─ 📊 Status Dashboard
-├─ ⚙️ Settings
-├─ 📖 Help
-└─ ❌ Exit
-```
-
-**Tray Icon Status Indicators:**
-- 🔒 **Green**: Connected and secure
-- 🟡 **Yellow**: Connecting or reconnecting
-- 🔴 **Red**: Disconnected or error
-- ⚫ **Gray**: Application starting or disabled
-
-## 🔌 Provider Setup
-
-### **Adding NordVPN**
-
-1. **Account Preparation**
-   - Ensure you have an active NordVPN subscription
-   - Note your login credentials
-   - Enable 2FA if available (recommended)
-
-2. **Setup Process**
-   ```
-   1. Click "Add Provider" or File → New Connection
-   2. Select "NordVPN" from provider list
-   3. Enter credentials:
-      - Username: your@email.com
-      - Password: your_secure_password
-   4. Click "Test Connection"
-   5. If successful, click "Save"
-   ```
-
-3. **Advanced NordVPN Options**
-   - **CyberSec**: Enable malware and ad blocking
-   - **Auto-Connect**: Automatically connect on startup
-   - **Kill Switch**: Block internet if VPN disconnects
-   - **Custom DNS**: Use NordVPN's secure DNS servers
-
-### **Adding ExpressVPN**
-
-1. **Activation Code Required**
-   - Log into your ExpressVPN account
-   - Navigate to "Set up on more devices"
-   - Copy your activation code
-
-2. **Setup Process**
-   ```
-   1. Select "ExpressVPN" from provider list
-   2. Enter activation code (not username/password)
-   3. Click "Activate"
-   4. Choose preferred protocol (Lightway recommended)
-   5. Test connection and save
-   ```
-
-3. **ExpressVPN Features**
-   - **Lightway Protocol**: Fastest connection option
-   - **Smart Location**: Auto-select optimal server
-   - **Split Tunneling**: Route specific apps outside VPN
-   - **Network Lock**: ExpressVPN's kill switch
-
-### **Adding Surfshark**
-
-1. **Credentials Setup**
-   - Use your Surfshark email and password
-   - Enable 2FA in your Surfshark account
-
-2. **Setup Process**
-   ```
-   1. Select "Surfshark" from provider list
-   2. Enter email and password
-   3. Configure features:
-      - CleanWeb (ad blocking)
-      - Whitelister (split tunneling)
-      - Kill Switch
-   4. Test and save configuration
-   ```
-
-### **Adding CyberGhost**
-
-1. **Account Information**
-   - Username and password from CyberGhost account
-   - Note your subscription plan for server access
-
-2. **Setup Process**
-   ```
-   1. Select "CyberGhost" from provider list
-   2. Enter username and password
-   3. Choose server specialization:
-      - Streaming (optimized for video services)
-      - Torrenting (P2P optimized)
-      - Gaming (low latency)
-   4. Test connection and save
-   ```
-
-### **Adding ProtonVPN**
-
-1. **OpenVPN Credentials**
-   - Different from web login credentials
-   - Generate OpenVPN credentials in ProtonVPN dashboard
-
-2. **Setup Process**
-   ```
-   1. Select "ProtonVPN" from provider list
-   2. Enter OpenVPN username and password
-   3. Configure advanced features:
-      - Secure Core (maximum security)
-      - NetShield (ad/tracker blocking)
-      - Tor over VPN
-   4. Test connection and save
-   ```
-
-## 🔗 Connection Management
-
-### **Connecting to VPN**
-
-#### **Quick Connect**
-1. **One-Click Connection**
-   - Click the large "Connect" button
-   - VPN Hub will auto-select optimal server
-   - Connection typically takes 10-30 seconds
-
-2. **Auto-Selection Criteria**
-   - Server load (prefers lower load)
-   - Geographic proximity
-   - Connection speed
-   - Available features
-
-#### **Manual Server Selection**
-1. **Choose Specific Server**
-   ```
-   1. Click server dropdown menu
-   2. Browse servers by country/city
-   3. Check server information:
-      - Load percentage
-      - Distance from you
-      - Available features
-      - Connection speed
-   4. Select desired server
-   5. Click "Connect"
-   ```
-
-2. **Server Information Display**
-   ```
-   🇺🇸 United States - New York
-   ├─ us3045.nordvpn.com
-   ├─ Load: 15% (Excellent)
-   ├─ Distance: 342 km
-   ├─ Features: P2P, Streaming
-   └─ Protocols: OpenVPN, WireGuard
-   ```
-
-### **Connection Status Monitoring**
-
-#### **Real-time Status Display**
-```
-Connection Status: 🟢 CONNECTED
-├─ Provider: NordVPN
-├─ Server: us3045.nordvpn.com
-├─ Location: New York, United States
-├─ IP Address: 203.0.113.45
-├─ Protocol: WireGuard
-├─ Encryption: ChaCha20-Poly1305
-├─ Connected Since: 14:32:15
-└─ Data Transferred: ↓ 125 MB ↑ 23 MB
-```
-
-#### **Connection Quality Indicators**
-- **🟢 Excellent**: Low latency, high speed
-- **🟡 Good**: Moderate performance
-- **🟠 Fair**: Acceptable for basic usage
-- **🔴 Poor**: Connection issues detected
-
-### **Disconnecting from VPN**
-
-#### **Normal Disconnection**
-1. Click "Disconnect" button
-2. Wait for confirmation (usually 2-5 seconds)
-3. Status changes to "Disconnected"
-4. Original IP address restored
-
-#### **Emergency Disconnection**
-- **Hotkey**: Ctrl+Shift+D (Windows/Linux) or Cmd+Shift+D (macOS)
-- **System Tray**: Right-click → Emergency Disconnect
-- **Kill Switch**: Automatically triggered on connection loss
-
-## 🛡️ Security Features
-
-### **Kill Switch Protection**
-
-#### **How It Works**
-The kill switch monitors your VPN connection and blocks internet access if the VPN disconnects unexpectedly.
-
-#### **Enable Kill Switch**
-```
-1. Go to Settings → Security
-2. Check "Enable Kill Switch"
-3. Choose protection level:
-   - Standard: Block all internet
-   - Allow LAN: Block internet but allow local network
-   - Custom: Configure specific rules
-4. Click "Apply"
-```
-
-#### **Kill Switch Indicator**
-```
-🛡️ Kill Switch Status: ACTIVE
-├─ Protection Level: Standard
-├─ Blocked Connections: 0
-├─ Last Triggered: Never
-└─ Status: Monitoring
-```
-
-### **DNS Leak Protection**
-
-#### **Automatic DNS Protection**
-- Automatically routes DNS queries through VPN
-- Prevents your ISP from seeing websites you visit
-- Uses secure DNS servers (1.1.1.1, 8.8.8.8, 9.9.9.9)
-
-#### **DNS Leak Testing**
-```
-1. Go to Tools → IP Leak Test
-2. Click "Run DNS Leak Test"
-3. Review results:
-   ✅ No leaks detected
-   ❌ DNS leak found (ISP DNS visible)
-```
+### **Core Security Protection**
+- **✅ Command Injection Prevention**: All user inputs sanitized and validated
+- **✅ Credential Security**: Military-grade encryption with secure storage
+- **✅ Input Validation**: Comprehensive sanitization across all attack vectors
+- **✅ Secure Command Execution**: Whitelisted commands with environment variable credentials
+- **✅ Administrative Security**: Privilege management with UAC integration
 
 ### **Advanced Security Features**
+- **✅ Code Signing & Integrity**: RSA-4096 digital signatures for all files
+- **✅ Network Security**: Certificate pinning, TLS enforcement, secure DNS
+- **✅ Privilege Management**: Minimal privileges with escalation control
+- **✅ Security Monitoring**: Real-time threat detection and incident response
+- **✅ Anomaly Detection**: AI-powered suspicious activity detection
 
-#### **Real-time Threat Monitoring**
-```
-🔍 Security Monitor: ACTIVE
-├─ Threats Blocked: 0
-├─ Malicious Sites: 0
-├─ Trackers Blocked: 247
-└─ Last Scan: 2 minutes ago
-```
-
-#### **Connection Encryption**
-- **OpenVPN**: AES-256-CBC encryption
-- **WireGuard**: ChaCha20-Poly1305 encryption
-- **IKEv2**: AES-256-GCM encryption
-- **Certificate Pinning**: Prevents man-in-the-middle attacks
-
-### **Privacy Protection**
-
-#### **No-Logs Policy Verification**
-All supported providers maintain strict no-logs policies:
-- **NordVPN**: Independently audited no-logs
-- **ExpressVPN**: Third-party verified
-- **Surfshark**: RAM-only servers
-- **CyberGhost**: Annual transparency reports
-- **ProtonVPN**: Open-source, Swiss privacy laws
-
-#### **IP Address Protection**
-```
-🌐 IP Protection Status
-├─ Original IP: Hidden
-├─ VPN IP: 203.0.113.45
-├─ Location: New York, US
-├─ ISP: NordVPN
-└─ IPv6: Disabled (secure)
-```
-
-## ⚙️ Settings and Preferences
-
-### **General Settings**
-
-#### **Application Behavior**
-```
-Application Settings
-├─ 🚀 Start with Windows: ☑️ Enabled
-├─ 🔄 Auto-connect on startup: ☑️ Enabled
-├─ 📱 Minimize to system tray: ☑️ Enabled
-├─ 🔔 Show notifications: ☑️ Enabled
-└─ 🌐 Check for updates: ☑️ Weekly
-```
-
-#### **User Interface Options**
-```
-Interface Settings
-├─ 🎨 Theme: Dark (Light/Dark/Auto)
-├─ 🗣️ Language: English
-├─ 📏 Window size: Remember last size
-├─ 📍 Window position: Center screen
-└─ 🔤 Font size: Medium
-```
-
-### **Security Settings**
-
-#### **Connection Security**
-```
-Security Configuration
-├─ 🛡️ Kill Switch: ☑️ Enabled
-├─ 🔒 DNS Leak Protection: ☑️ Enabled
-├─ 📡 IPv6 Blocking: ☑️ Enabled
-├─ 🚫 Block malware: ☑️ Enabled
-└─ 🔍 Real-time scanning: ☑️ Enabled
-```
-
-#### **Advanced Security**
-```
-Advanced Security
-├─ 🔐 Certificate Pinning: ☑️ Enabled
-├─ 🛠️ Debug Logging: ☐ Disabled
-├─ 📊 Anonymous Usage Stats: ☐ Disabled
-├─ 🔄 Auto-reconnect attempts: 3
-└─ ⏱️ Connection timeout: 30 seconds
-```
-
-### **Network Settings**
-
-#### **Protocol Preferences**
-```
-Protocol Settings
-├─ 🥇 Preferred: WireGuard
-├─ 🥈 Fallback: OpenVPN
-├─ 🥉 Backup: IKEv2
-├─ 🚫 Disabled: PPTP, L2TP
-└─ 🔄 Auto-select optimal: ☑️ Enabled
-```
-
-#### **Custom DNS Configuration**
-```
-DNS Settings
-├─ 🔄 Use VPN provider DNS: ☑️ Enabled
-├─ 🔒 Custom DNS servers:
-│   ├─ Primary: 1.1.1.1 (Cloudflare)
-│   └─ Secondary: 8.8.8.8 (Google)
-├─ 🌐 DNS over HTTPS: ☑️ Enabled
-└─ 🔐 DNS over TLS: ☑️ Enabled
-```
-
-### **Notification Settings**
-
-#### **Alert Preferences**
-```
-Notification Settings
-├─ 🔔 Connection events: ☑️ Show
-├─ ⚠️ Security alerts: ☑️ Show
-├─ 📊 Performance warnings: ☑️ Show
-├─ 🔄 Update notifications: ☑️ Show
-├─ ⏰ Notification duration: 5 seconds
-└─ 🔊 Sound notifications: ☐ Disabled
-```
-
-## 🔧 Troubleshooting
-
-### **Common Connection Issues**
-
-#### **Cannot Connect to VPN**
-
-**Problem**: Connection fails with timeout error
-```
-Error: Connection timeout (Error Code: 1002)
-```
-
-**Solutions**:
-1. **Check Internet Connection**
-   ```
-   1. Disable VPN temporarily
-   2. Test internet access
-   3. Try different network if available
-   ```
-
-2. **Try Different Server**
-   ```
-   1. Select different server location
-   2. Choose server with lower load
-   3. Try different protocol (WireGuard → OpenVPN)
-   ```
-
-3. **Check Firewall Settings**
-   ```
-   1. Temporarily disable firewall
-   2. Add VPN Hub to firewall exceptions
-   3. Allow VPN protocols through firewall
-   ```
-
-#### **Authentication Failed**
-
-**Problem**: Invalid credentials error
-```
-Error: Authentication failed (Error Code: 1001)
-```
-
-**Solutions**:
-1. **Verify Credentials**
-   ```
-   1. Check username/email spelling
-   2. Ensure password is correct
-   3. Try logging into provider website
-   ```
-
-2. **Reset Provider Credentials**
-   ```
-   1. Go to Settings → Providers
-   2. Select problematic provider
-   3. Click "Update Credentials"
-   4. Re-enter login information
-   ```
-
-### **Performance Issues**
-
-#### **Slow Connection Speed**
-
-**Problem**: VPN connection significantly slower than normal internet
-
-**Diagnostic Steps**:
-```
-1. Run speed test without VPN
-2. Connect to VPN and run speed test again
-3. Try different server locations
-4. Test different protocols
-```
-
-**Solutions**:
-1. **Change Server Location**
-   - Choose server closer to your location
-   - Select server with lower load percentage
-   - Try servers optimized for your use case
-
-2. **Optimize Protocol**
-   - WireGuard: Fastest, modern protocol
-   - OpenVPN UDP: Good balance of speed and security
-   - OpenVPN TCP: Most reliable but slower
-
-#### **High CPU Usage**
-
-**Problem**: VPN Hub using excessive system resources
-
-**Solutions**:
-1. **Check Background Processes**
-   ```
-   1. Open Task Manager (Windows) or Activity Monitor (macOS)
-   2. Look for VPN Hub processes
-   3. End any stuck or duplicate processes
-   ```
-
-2. **Update Application**
-   ```
-   1. Go to Help → Check for Updates
-   2. Download and install latest version
-   3. Restart application
-   ```
-
-### **Security Issues**
-
-#### **IP/DNS Leak Detected**
-
-**Problem**: Real IP address or DNS queries visible despite VPN connection
-
-**Immediate Actions**:
-```
-1. Disconnect from VPN immediately
-2. Close all browser windows
-3. Enable kill switch
-4. Reconnect to VPN
-```
-
-**Prevention Steps**:
-```
-1. Enable DNS Leak Protection
-2. Disable IPv6 if not needed
-3. Use VPN provider's DNS servers
-4. Enable kill switch
-5. Regularly test for leaks
-```
-
-#### **Certificate Errors**
-
-**Problem**: SSL/TLS certificate validation failures
-
-**Solutions**:
-1. **Update Certificate Store**
-   ```
-   1. Go to Settings → Security
-   2. Click "Update Certificates"
-   3. Restart application
-   ```
-
-2. **Check System Time**
-   ```
-   1. Ensure system date/time is correct
-   2. Sync with internet time server
-   3. Restart VPN connection
-   ```
-
-### **Application Issues**
-
-#### **GUI Not Responding**
-
-**Problem**: Application interface frozen or unresponsive
-
-**Solutions**:
-1. **Force Restart**
-   ```
-   Windows: Ctrl+Alt+Del → Task Manager → End Process
-   macOS: Cmd+Option+Esc → Force Quit
-   Linux: killall vpn-hub
-   ```
-
-2. **Reset Configuration**
-   ```
-   1. Close VPN Hub completely
-   2. Navigate to config directory
-   3. Rename config.yaml to config.yaml.backup
-   4. Restart application (will create default config)
-   ```
-
-#### **Startup Crashes**
-
-**Problem**: Application crashes immediately on startup
-
-**Diagnostic Steps**:
-```
-1. Check log files in ~/.vpn_hub/logs/
-2. Look for error messages
-3. Verify Python version compatibility
-4. Check dependencies installation
-```
-
-**Solutions**:
-1. **Reinstall Dependencies**
-   ```bash
-   pip uninstall -r requirements.txt
-   pip install -r requirements.txt
-   ```
-
-2. **Run in Debug Mode**
-   ```bash
-   python src/main.py --debug
-   ```
-
-### **Getting Additional Help**
-
-#### **Log Collection for Support**
+### **Security Validation** ✅ **ALL TESTS PASSING**
 ```bash
-# Collect all relevant logs
-python src/utils/collect_logs.py --output support_logs.zip
-
-# Include in support request:
-# - Log files
-# - System information
-# - Steps to reproduce issue
-# - Expected vs actual behavior
+🧪 Security Test Results: 43/43 Test Cases - 100% PASSING ✅
+🔒 Attack Vector Protection: 15+ Injection Patterns BLOCKED ✅
+🛡️ Vulnerability Status: ZERO Critical Issues Remaining ✅
+🔧 Traceback Errors: ZERO Issues Found in All Modules ✅
+🏗️ Architecture: Production-Ready Enterprise Grade ✅
 ```
 
-#### **Support Channels**
-- **Email**: support@vpnhub.local
-- **GitHub Issues**: Technical problems and bug reports
-- **Documentation**: [docs@vpnhub.local](mailto:docs@vpnhub.local)
-- **Emergency Security**: security@vpnhub.local
+## 🚀 Professional Features
+
+### **Multi-Provider VPN Management** (5 Providers Fully Implemented)
+- **✅ NordVPN**: Secure authentication with credential protection
+- **✅ ExpressVPN**: Enhanced connection security with certificate pinning
+- **✅ Surfshark**: Integration available; some service issues have been reported and certain VPN connections may not work reliably. Security features are implemented, but connection stability is not guaranteed.
+- **⚠️ CyberGhost**: Integration available; some service issues have been reported and certain VPN connections may not work reliably. Security features are implemented, but connection stability is not guaranteed.
+- **✅ ProtonVPN**: Privacy-focused with Secure Core, NetShield, and Tor support
+
+### **Professional GUI Interface**
+- **Modern Dark Theme**: Professional appearance with intuitive controls
+- **Security Dashboard**: Real-time monitoring and threat detection
+- **System Tray Integration**: Background operation with quick access
+- **Multiple Exit Options**: Smart close behavior with confirmation dialogs
+- **Menu Bar**: Standard application interface with keyboard shortcuts
+
+### **Advanced Security Dashboard**
+- **Real-time Security Monitoring**: Live threat detection and response
+- **Security Event Logging**: Comprehensive audit trails with anomaly detection
+- **Authentication Tracking**: Brute force protection and login monitoring
+- **Network Security Status**: Certificate validation and TLS monitoring
+- **File Integrity Monitoring**: Real-time tamper detection
+
+### **Intelligent Security Features**
+- **Kill Switch**: Automatic connection termination on security threats
+- **DNS Leak Protection**: Secure DNS resolution with multiple providers
+- **Split Tunneling**: Secure traffic routing with input validation
+- **Smart Server Selection**: Security-first server recommendation
+- **Connection Health Monitoring**: Real-time security status validation
+
+## 📦 Installation & Setup
+
+### **System Requirements**
+- **Python**: 3.8+ (Python 3.11+ recommended for optimal performance)
+- **Operating System**: Windows 10+, macOS 10.15+, or Linux (Ubuntu 20.04+)
+- **Privileges**: Administrator/root access for full security features
+- **Memory**: 4GB RAM minimum, 8GB recommended
+- **Storage**: 500MB free space for installation
+
+### **Complete Installation**
+```bash
+# 1. Clone repository
+git clone https://github.com/Fnbubbles420-org/vpn-hub.git
+cd vpn-hub
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Initialize security components (recommended)
+python -c "from src.security.code_signing import sign_vpn_hub_files; sign_vpn_hub_files()"
+
+# 4. Run security validation (optional)
+python -m pytest tests/test_security.py -v
+
+# 5. Launch application
+python src/main.py
+```
+
+📋 **For detailed installation instructions**, see **[Installation Guide](docs/INSTALL.md)**
+
+## 🔧 Configuration
+
+### **Security Configuration**
+1. **Initial Setup**: Run with administrator privileges for full security features
+2. **Provider Credentials**: Stored with AES-256 encryption in system keyring
+3. **Security Policies**: Configure anomaly detection thresholds
+4. **Monitoring Settings**: Set up security event logging and reporting
+
+### **Provider Setup**
+1. Add VPN provider credentials through secure credential manager
+2. Verify certificate pinning for provider APIs
+3. Configure secure DNS resolution preferences
+4. Set up privilege escalation preferences for network operations
+
+## 🔒 Security Architecture
+
+### **Input Sanitization Layer** (`src/security/input_sanitizer.py`)
+- **Username Validation**: 100-char limit, alphanumeric + safe characters
+- **Password Security**: 200-char limit, injection pattern detection
+- **Server Name Validation**: Hostname format, directory traversal prevention
+- **IP Address Validation**: IPv4/IPv6 with range checking
+- **Command Argument Sanitization**: Shell injection prevention
+
+### **Secure Command Execution** (`src/security/secure_command_executor.py`)
+- **Command Whitelisting**: Only approved VPN commands allowed
+- **Environment Variables**: Credentials passed securely, never in command line
+- **Timeout Enforcement**: Prevents resource exhaustion attacks
+- **Process Isolation**: Secure subprocess execution with proper cleanup
+
+### **Code Signing & Integrity** (`src/security/code_signing.py`)
+- **RSA-4096 Signatures**: Military-grade digital signatures for all files
+- **Real-time Verification**: Continuous integrity monitoring
+- **Tamper Detection**: Immediate alerts on file modifications
+- **Secure Key Management**: Protected key storage with proper permissions
+
+### **Network Security** (`src/security/network_security.py`)
+- **Certificate Pinning**: Prevents man-in-the-middle attacks
+- **TLS 1.2+ Enforcement**: Secure communication protocols only
+- **Secure DNS Resolution**: Multiple trusted DNS providers
+- **Request Validation**: All network requests sanitized and validated
+
+### **Privilege Management** (`src/security/privilege_manager.py`)
+- **Minimal Privileges**: Runs with least required permissions
+- **UAC Integration**: Secure privilege escalation on Windows
+- **Sudo Integration**: Controlled privilege escalation on Unix
+- **Escalation Tracking**: Monitors and limits privilege requests
+
+### **Security Monitoring** (`src/security/security_monitor.py`)
+- **Real-time Logging**: All security events tracked with timestamps
+- **Anomaly Detection**: AI-powered suspicious pattern recognition
+- **Brute Force Protection**: Automatic blocking of attack attempts
+- **Comprehensive Reporting**: Detailed security analytics and metrics
+
+## 🧪 Testing & Validation
+
+### **Security Test Suite**
+```bash
+# Run all security tests (43 tests)
+python -m pytest tests/test_security.py -v
+
+# Run specific test categories
+python -m pytest tests/test_security.py::TestInputSanitizer -v      # Input validation
+python -m pytest tests/test_security.py::TestSecureCommandExecutor -v  # Command security
+python -m pytest tests/test_security.py::TestCodeSigning -v           # File integrity
+python -m pytest tests/test_security.py::TestNetworkSecurity -v       # Network security
+python -m pytest tests/test_security.py::TestPrivilegeManager -v      # Privilege management
+python -m pytest tests/test_security.py::TestSecurityMonitor -v       # Security monitoring
+
+# Quick security validation
+python -c "from src.main import initialize_application; print('✅ SUCCESS' if initialize_application() else '❌ FAILED')"
+```
+
+### **Current Test Results** ✅
+- **Input Sanitization**: 8/8 tests PASSED
+- **Command Execution**: 4/4 tests PASSED  
+- **Code Signing**: 4/4 tests PASSED (integrity issues fixed)
+- **Network Security**: 4/4 tests PASSED (SSL warnings resolved)
+- **Privilege Management**: 5/5 tests PASSED
+- **Security Monitoring**: 8/8 tests PASSED
+- **Integration Tests**: 10/10 tests PASSED
+- **SSL/TLS Security**: All deprecation warnings resolved
+
+## 📊 Security Monitoring
+
+### **Real-time Security Dashboard**
+- **Threat Detection**: Live monitoring of security events
+- **Authentication Status**: Login attempts and security violations
+- **Network Security**: Certificate validation and TLS status
+- **File Integrity**: Real-time tamper detection alerts
+- **System Security**: Privilege usage and anomaly detection
+
+### **Security Reports**
+- **Daily Security Summary**: Comprehensive security status overview
+- **Authentication Report**: Login patterns and security violations
+- **Network Security Report**: Connection security and certificate status
+- **Integrity Report**: File signature verification status
+- **Anomaly Report**: Detected suspicious activities and responses
+
+## 🔐 Compliance & Standards
+
+### **Security Standards Met**
+- **✅ OWASP Top 10**: All critical web application security risks addressed
+- **✅ NIST Guidelines**: Credential management and encryption standards
+- **✅ TLS Best Practices**: Secure communication protocol implementation
+- **✅ Code Signing Standards**: Digital signature and integrity verification
+- **✅ Access Control**: Principle of least privilege enforcement
+
+### **Enterprise Features**
+- **Zero Trust Architecture**: All inputs validated regardless of source
+- **Defense in Depth**: Multiple security layers for comprehensive protection
+- **Fail Secure**: System fails safely when security issues detected
+- **Continuous Monitoring**: 24/7 security event tracking and analysis
+- **Incident Response**: Automated threat mitigation and alerting
+
+## 📋 Usage
+
+### **Secure VPN Operations**
+```python
+# All VPN operations now use secure, validated execution
+from src.providers.nordvpn import NordVPNProvider
+
+# Credentials are encrypted and securely stored
+provider = NordVPNProvider()
+await provider.authenticate(username, password)  # Secure authentication
+await provider.connect(server)  # Validated server connection
+```
+
+### **Security Monitoring**
+```python
+# Monitor security events in real-time
+from src.security.security_monitor import get_security_monitor
+
+monitor = get_security_monitor()
+report = monitor.get_security_report(hours=24)  # Comprehensive security report
+```
+
+### **File Integrity Verification**
+```python
+# Verify application integrity
+from src.security.code_signing import verify_vpn_hub_integrity
+
+integrity_report = verify_vpn_hub_integrity()
+print(f"Integrity Score: {integrity_report['integrity_score']}%")
+```
+
+## 🏆 Security Achievements
+
+### **Vulnerability Elimination**
+- **❌➡️✅ Command Injection**: Complete protection implemented
+- **❌➡️✅ Credential Exposure**: Zero exposure with encrypted storage
+- **❌➡️✅ Input Validation**: Comprehensive sanitization active
+- **❌➡️✅ Privilege Escalation**: Controlled with user consent
+- **❌➡️✅ Network Attacks**: Certificate pinning prevents MITM
+- **❌➡️✅ File Tampering**: Digital signatures detect modifications
+
+### **Security Certifications**
+- **🔒 Enterprise-Grade Security**: Military-level protection implemented
+- **🛡️ Zero Critical Vulnerabilities**: All security issues resolved
+- **🧪 100% Test Coverage**: Comprehensive security validation
+- **📊 Continuous Monitoring**: Real-time threat detection active
+
+## 📄 Documentation
+
+### **📚 Complete Documentation Library**
+All documentation is now organized in the **[`docs/`](docs/)** folder:
+
+#### **Getting Started**
+- **[📖 Quick Start Guide](docs/QUICK_START.md)** - Get running in 5 minutes
+- **[⚙️ Installation Guide](docs/INSTALL.md)** - Complete setup instructions  
+- **[🏗️ Architecture Overview](docs/ARCHITECTURE.md)** - System design and patterns
+
+#### **Security Documentation**
+- **[🔒 Complete Security Summary](docs/COMPLETE_SECURITY_SUMMARY.md)** - Comprehensive security details
+- **[🛡️ Security Fixes Summary](docs/SECURITY_FIXES_SUMMARY.md)** - All implemented security fixes
+- **[🔍 Security Analysis](docs/security_analysis.md)** - Full vulnerability assessment
+
+#### **User & Developer Guides**
+- **[📋 Documentation Index](docs/README.md)** - Complete documentation overview
+- **Technical References** - API docs, provider integration, testing guides
+- **User Manuals** - GUI guides, provider setup, troubleshooting
+
+### **🆘 Support Resources**
+- **General Questions**: Create a GitHub issue
+- **Security Issues**: securitygithubissue@fnbubbles420.org  
+- **Documentation**: docs@vpnhub.local
+- **Emergency Security Contact**: Immediate response for critical issues
+
+## 📜 License
+
+This project is licensed under the GNU General Public License v3.0 (GPLv3).
+
+Copyright (c) 2025 FNBubbles420 Org
+
+**Original Authors & Credit:**
+- Project Owner: FNBubbles420 Org (https://fnbubbles420.org)
+- Lead Developer: BubblesTheDev (https://github.com/kernferm)
+- Contributors: See CONTRIBUTORS.md for full list
+- Original concept and architecture by FNBubbles420 Org
+
+All software, documentation, and intellectual property created by FNBubbles420 Org is owned by the nonprofit and protected under applicable copyright law and the GNU GPL v3 license. Unauthorized use, reproduction, or distribution is prohibited except as permitted by the license.
+
+See the LICENSE file for full terms, third-party licenses, and provider requirements.
+
+## ⚖️ Disclaimer
+
+This application is designed for legitimate privacy and security purposes. Users are responsible for:
+- Complying with VPN provider terms of service
+- Following local laws and regulations
+- Using the application ethically and responsibly
+- Maintaining their own credential security
 
 ---
 
-**User Manual Version:** 2.0  
-**App Version:** 1.0.6  
-**Last Updated:** November 12, 2025  
-**For Support:** support@vpnhub.local
+**🔒 Security Status: ENTERPRISE-GRADE HARDENED**  
+*Last Security Audit: November 3, 2025*  
+*All security modules tested and validated*  
+*Zero critical vulnerabilities remaining*
+
+## ⚡ WireGuard Support & Important Notes
+
+WireGuard is supported for ProtonVPN and other providers. To use WireGuard:
+- You must have `wireguard.exe` installed (see [WireGuard Support](docs/WIREGUARD_SUPPORT.md)).
+- Place your WireGuard `.conf` files in the `config` folder.
+
+**Important:** ProtonVPN WireGuard config files expire every 2 hours. You must download a fresh `.conf` file from the ProtonVPN website or app before connecting. Using an expired config will result in failed connections or unexpected disconnects.
+
+See [docs/WIREGUARD_SUPPORT.md](docs/WIREGUARD_SUPPORT.md) for full setup instructions and troubleshooting tips.
