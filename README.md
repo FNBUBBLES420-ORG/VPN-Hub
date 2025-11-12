@@ -5,7 +5,7 @@
 [![Tests](https://img.shields.io/badge/Tests-43%2F43%20Passing-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white)](tests/)
 [![License](https://img.shields.io/badge/License-GNU%20GPL%20v3-blue?style=for-the-badge&logo=gnu&logoColor=white)](LICENSE)
 
-[![VPN Providers](https://img.shields.io/badge/VPN%20Providers-5%20Supported-purple?style=for-the-badge&logo=vpn&logoColor=white)](#-professional-features)
+[![VPN Providers](https://img.shields.io/badge/VPN%20Providers-6%20Supported-purple?style=for-the-badge&logo=vpn&logoColor=white)](#-professional-features)
 [![GUI](https://img.shields.io/badge/GUI-PyQt5-orange?style=for-the-badge&logo=qt&logoColor=white)](src/gui/)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=for-the-badge&logo=windows&logoColor=white)](#-installation--setup)
 [![Documentation](https://img.shields.io/badge/Documentation-Complete-blue?style=for-the-badge&logo=gitbook&logoColor=white)](docs/README.md)
@@ -349,6 +349,7 @@ This application is designed for legitimate privacy and security purposes. Users
 ## WireGuard Support
 
 See [docs/WIREGUARD_SUPPORT.md](docs/WIREGUARD_SUPPORT.md) for details on WireGuard requirements and setup.
+
 
 
 
