@@ -8,3 +8,8 @@ To use the WireGuard protocol with ProtonVPN or any other provider, you must hav
 If `wireguard.exe` is not installed, WireGuard connections will fail and you will not be able to use this protocol in the app.
 
 **Important:** ProtonVPN WireGuard config files expire every 2 hours. You must download a fresh `.conf` file from the ProtonVPN website or app before connecting. If you use an expired config, connection will fail or disconnect unexpectedly.
+
+- Make sure to add the `.conf` files to the wireguard application before using the `VPN HUB`.
+  > Makes the `Disconnect` button work. if you have issues join the discord 
+
+### [https://fnbubbles420.org/discordinvite](https://fnbubbles420.org/discordinvite)
