@@ -95,6 +95,10 @@ python src/main.py
 - **Smart Server Selection**: Security-first server recommendation
 - **Connection Health Monitoring**: Real-time security status validation
 
+### ISSUES ??
+- JOIN THE DISCORD. ping `BubblesTheDev`.
+- [![](https://invidget.switchblade.xyz/zQbJJgwbUv)](https://discord.gg/zQbJJgwbUv)
+
 ## 📦 Installation & Setup
 
 ### **System Requirements**
@@ -296,9 +300,6 @@ All documentation is now organized in the **[`docs/`](docs/)** folder:
 - **[⚙️ Installation Guide](docs/INSTALL.md)** - Complete setup instructions  
 - **[🏗️ Architecture Overview](docs/ARCHITECTURE.md)** - System design and patterns
 
-### ISSUES ??
-- JOIN THE DISCORD. [![](https://invidget.switchblade.xyz/zQbJJgwbUv)](https://discord.gg/zQbJJgwbUv)
-
 #### **Security Documentation**
 - **[🔒 Complete Security Summary](docs/COMPLETE_SECURITY_SUMMARY.md)** - Comprehensive security details
 - **[🛡️ Security Fixes Summary](docs/SECURITY_FIXES_SUMMARY.md)** - All implemented security fixes
@@ -355,4 +356,5 @@ WireGuard is supported for ProtonVPN and other providers. To use WireGuard:
 **Important:** ProtonVPN WireGuard config files expire every 2 hours. You must download a fresh `.conf` file from the ProtonVPN website or app before connecting. Using an expired config will result in failed connections or unexpected disconnects.
 
 See [docs/WIREGUARD_SUPPORT.md](docs/WIREGUARD_SUPPORT.md) for full setup instructions and troubleshooting tips.
+
 
