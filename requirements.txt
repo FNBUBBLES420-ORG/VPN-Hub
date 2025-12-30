@@ -1,6 +1,6 @@
 requests==2.32.5
 cryptography==46.0.3
-psutil==7.2.0
+psutil==7.2.1
 PyQt5==5.15.11
 pycryptodome==3.23.0
 openvpn-api==0.3.0
