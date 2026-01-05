@@ -9,7 +9,7 @@ dnspython==2.8.0
 netifaces==0.11.0
 paramiko==4.0.0
 asyncio==4.0.0
-aiohttp==3.13.2
+aiohttp==3.13.3
 pyyaml==6.0.3
 keyring==25.7.0
 schedule==1.2.2
