@@ -181,7 +181,12 @@ class SecureCommandExecutor:
             if working_dir:
                 working_dir = InputSanitizer.sanitize_file_path(working_dir)
             
-            self.logger.info(f"Executing secure command: {base_command} {command[1] if len(command) > 1 else ''}")
+            # Log only non-sensitive execution metadata (never log raw command arguments)
+            self.logger.info(
+                "Executing secure command: %s (args_count=%d)",
+                base_command,
+                max(len(command) - 1, 0)
+            )
             
             # Execute command securely
             return await self._execute_subprocess(
