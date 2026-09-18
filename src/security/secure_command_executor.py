@@ -184,7 +184,7 @@ class SecureCommandExecutor:
             # Log only non-sensitive execution metadata (never log raw command arguments)
             self.logger.info(
                 "Executing secure command: %s (args_count=%d)",
-                base_command,
+                command_key,
                 max(len(command) - 1, 0)
             )
             
