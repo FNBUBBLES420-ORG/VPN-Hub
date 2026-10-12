@@ -5,7 +5,7 @@ PyQt5==5.15.11
 pycryptodome==3.23.0
 openvpn-api==0.3.0
 wireguard-tools==0.6.0
-dnspython==2.8.0
+dnspython==2.9.0
 netifaces==0.11.0
 paramiko==5.0.0
 asyncio==4.0.0
