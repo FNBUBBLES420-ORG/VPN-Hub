@@ -15,5 +15,5 @@ keyring==25.7.0
 schedule==1.2.2
 colorama==0.4.6
 tqdm==4.70.1
-pytest==9.1.1
+pytest==9.2.0
 pytest-asyncio==1.4.0
