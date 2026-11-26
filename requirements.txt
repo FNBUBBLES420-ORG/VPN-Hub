@@ -10,7 +10,7 @@ netifaces==0.11.0
 paramiko==5.0.1
 asyncio==4.0.0
 aiohttp==3.14.5
-pyyaml==6.0.3
+pyyaml==6.0.4
 keyring==25.7.0
 schedule==1.2.2
 colorama==0.4.6
